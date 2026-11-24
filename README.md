@@ -7,6 +7,7 @@ Two expository papers on the Hodge theory of smooth complex projective varieties
 | File | Title |
 | --- | --- |
 | `gaga_kahler_lefschetz.tex` | Notes on Analytification, GAGA, Kähler Identities, and Lefschetz Theory |
+| [Notes on Analytification, GAGA, Kähler Identities, and Lefschetz Theory (PDF)] (gaga_kahler_lefschetz.pdf) | pdf |
 | `hodge_classes_algebraic_cycles.tex` | Hodge Classes and Algebraic Cycles |
 | `references.bib` | Bibliography used by both papers |
 
