@@ -1,0 +1,1017 @@
+% Version 5, 12 November 2026. Revised from v004.tex.
+% Bibliography: references.bib, shared with the companion paper gaga_kahler_lefschetz.tex.
+
+\documentclass[11pt,reqno]{amsart}
+
+% ----------------------------------------------------------------------
+% Packages
+% ----------------------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{microtype}
+\usepackage[a4paper,margin=1.15in]{geometry}
+\usepackage{booktabs,tabularx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!60!black,
+  citecolor=blue!60!black,
+  urlcolor=blue!60!black,
+  pdftitle={Notes on Hodge Classes and Algebraic Cycles}
+}
+
+% ----------------------------------------------------------------------
+% Theorem environments
+% ----------------------------------------------------------------------
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\numberwithin{equation}{section}
+
+% ----------------------------------------------------------------------
+% Commands
+% ----------------------------------------------------------------------
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\OO}{\mathcal{O}}
+\newcommand{\an}{\mathrm{an}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\ii}{\mathrm{i}}
+\newcommand{\dbar}{\bar\partial}
+\DeclareMathOperator{\CH}{CH}
+\DeclareMathOperator{\Hdg}{Hdg}
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\PD}{PD}
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\Pic}{Pic}
+\DeclareMathOperator{\Hom}{Hom}
+
+% ----------------------------------------------------------------------
+% Document information
+% ----------------------------------------------------------------------
+\title[Hodge Classes]
+{Notes on Hodge Classes and Algebraic Cycles}
+\author{Jhune Yim} % TODO: name, address, email
+\email{jhune\_yim@protonmail.com}
+\date{12 November 2026}
+\subjclass[2020]{Primary 14C30; Secondary 14C25, 14F25, 32J25}
+\keywords{Hodge classes, algebraic cycles, cycle-class map, Lefschetz
+  theorems, quintic threefold}
+
+\begin{document}
+\raggedbottom
+
+\begin{abstract}
+This is an expository account of the Hodge conjecture predicts that
+every rational cohomology class of type $(p,p)$ on a smooth complex
+projective variety is the class of a rational cycle of codimension
+$p$. We construct the cycle-class map from fundamental classes and
+explain the Hodge-type condition. The analytic exponential sequence
+and GAGA give the divisor case, and Hard Lefschetz gives the curve
+case. On a smooth quintic threefold the Lefschetz argument represents the
+generator of $H^4$ only with denominator five, while a line represents it
+integrally. Examples separate the complex Hodge summands from the rational
+classes they contain. The final sections discuss integral and K\"ahler
+counterexamples, variation in families, and recent results on abelian
+varieties.
+\end{abstract}
+
+\maketitle
+
+\setcounter{tocdepth}{1}
+\tableofcontents
+
+\section{The conjecture}\label{sec:question}
+
+A smooth complex projective variety can be studied through its polynomial
+equations, through the topology of its complex points, and through its complex
+analytic structure. These descriptions retain different information. The Hodge
+conjecture proposes an exact criterion for deciding which rational cohomology
+classes arise from algebraic subvarieties.
+
+Fix a connected smooth projective variety $X$ over $\C$ of complex dimension $n$.
+Unless a distinction matters, write $X$ also for its associated complex manifold
+$X^{\an}$. For $0\leq p\leq n$, define
+\begin{equation}\label{eq:hodgeclasses}
+ \Hdg^p(X):=\{\alpha\in H^{2p}(X,\Q):
+                 \alpha_{\C}\in H^{p,p}(X)\}.
+\end{equation}
+Here $\alpha_{\C}$ is the image under extension of coefficients from $\Q$ to
+$\C$. Equivalently, $\Hdg^p(X)=H^{2p}(X,\Q)\cap H^{p,p}(X)$, with the
+intersection taken inside $H^{2p}(X,\C)$.
+
+\begin{conjecture}[Rational Hodge conjecture]\label{conj:hodge}
+For every $\alpha\in\Hdg^p(X)$, there exist finitely many irreducible closed
+algebraic subvarieties $Z_i\subseteq X$ of complex codimension $p$ and rational
+numbers $q_i$ such that
+\begin{equation}\label{eq:main}
+ \alpha=\sum_i q_i\,\cl(Z_i).
+\end{equation}
+\end{conjecture}
+
+This is the standard rational formulation \cite{delignecmi2006,cmihodge}. The equality
+takes place in cohomology. A representing cycle is a formal sum of
+subvarieties with rational coefficients of either sign, and its components
+are defined over the base field $\C$.
+
+\section{Prerequisites and conventions}\label{sec:prereq}
+
+The statement and the elementary examples need the following background.
+From linear algebra we use vector spaces over $\Q$ and $\C$, tensor
+products, duals, exterior powers, and complex conjugation. These enter
+through extension of coefficients and the decomposition of cohomology. From
+algebraic geometry we use projective varieties, irreducibility, dimension
+and codimension, and smoothness. From topology we use singular homology and
+cohomology, the cup product, and Poincar\'e duality on a compact oriented
+manifold \cite{hatcher2002}. From complex geometry we use differential forms and
+their types, Hermitian and K\"ahler metrics, and the Hodge decomposition
+\cite{griffithsharris1978,voisin2002hodge,voisin2003hodge2}. The cycle theory, meaning rational equivalence,
+Chow groups, divisors and line bundles, and first Chern classes, is
+developed by Fulton \cite{fulton1998}. Schemes, derived categories, and motives
+are not needed for the statement. The later sections on further directions
+introduce additional notions as they arise.
+
+All dimensions and codimensions of algebraic varieties below are complex
+unless stated otherwise, so $\dim_{\R}X^{\an}=2n$. For a coefficient ring
+$R=\Z,\Q,\R,\C$, the notation $H^k(X,R)$ refers to singular cohomology
+of $X^{\an}$. With a sheaf as coefficient, we specify the algebraic or
+analytic space whenever both are in use.
+
+\section{Projective varieties and their analytic geometry}
+
+\subsection{Projective space and polynomial equations}
+
+The complex points of projective space have the description
+\[
+ \PP^N(\C)=(\C^{N+1}\setminus\{0\})/\C^*,
+ \qquad
+ [z_0:\cdots:z_N]=[\lambda z_0:\cdots:\lambda z_N]
+ \quad(\lambda\neq0).
+\]
+A projective algebraic variety admits a closed embedding into the scheme
+$\PP^N_{\C}$. In such an embedding it is given by homogeneous equations
+\[
+ F_1(z_0,\ldots,z_N)=\cdots=F_r(z_0,\ldots,z_N)=0.
+\]
+Homogeneity ensures that the equations make sense on projective points.
+For example, $z_0z_2-z_1^2=0$ defines a smooth conic in $\PP^2_{\C}$.
+
+Projectivity does not imply smoothness. Smoothness is a separate requirement:
+locally the tangent space must have the expected dimension. For a
+hypersurface, the Jacobian criterion says that its partial derivatives must
+not vanish simultaneously at a projective point on the hypersurface. The
+general criterion compares Jacobian rank with codimension \cite{griffithsharris1978}.
+
+\subsection{Compactness, complex structure, and the K\"ahler condition}
+
+The analytic space of a smooth projective $X$ is a compact complex manifold.
+Compactness follows because complex projective space is compact and $X$ is
+closed. Smooth complex manifolds are canonically oriented as real manifolds.
+The Fubini--Study metric on projective space restricts to a K\"ahler metric on
+$X$.
+
+A Hermitian metric has an associated real differential form $\omega$ of type
+$(1,1)$. It is K\"ahler when $\dd\omega=0$. This condition gives the identities
+between differential operators that make the Hodge decomposition possible.
+Thus the relevant implications are
+\[
+ \text{smooth projective over }\C
+ \ \Longrightarrow\ \text{compact K\"ahler}
+ \ \Longrightarrow\ \text{compact complex manifold}.
+\]
+The projective embedding provides the integral K\"ahler class
+$c_1(\OO_X(1))$, a fact we use when applying Hard Lefschetz over $\Q$
+\cite{voisin2002hodge,gaganotes}.
+
+\section{Homology, cohomology, and geometric classes}\label{sec:cohomology}
+
+\subsection{Chains, cycles, and cochains}
+
+Singular homology is built from continuous maps of simplices into a space.
+With coefficients in a ring $R$, the singular chain groups $C_k(X,R)$ have
+boundary maps $\partial_k$ satisfying $\partial_k\partial_{k+1}=0$. Their
+homology is
+\[
+ H_k(X,R)=\ker(\partial_k)/\im(\partial_{k+1}).
+\]
+A \emph{topological cycle} is a chain with zero boundary. This usage of
+``cycle'' is related to, but different from, an algebraic cycle.
+
+Cochains are $R$-linear functions on chains, with coboundary induced by
+$\partial$. Their cohomology is
+\[
+ H^k(X,R)=\ker(\delta^k)/\im(\delta^{k-1}).
+\]
+Over $\Q$, the evaluation pairing gives a natural identification
+\[
+ H^k(X,\Q)\cong\Hom_{\Q}(H_k(X,\Q),\Q).
+\]
+Over $\Z$, the universal coefficient theorem gives
+$\operatorname{Ext}^1_{\Z}(H_{k-1}(X,\Z),\Z)$ as the kernel of evaluation
+onto $\Hom_{\Z}(H_k(X,\Z),\Z)$.
+
+The intuition of detecting ``holes'' is helpful for first examples, but
+cohomology also records orientation and intersection data. Its multiplication,
+the cup product,
+\[
+ H^a(X,R)\times H^b(X,R)\longrightarrow H^{a+b}(X,R),
+ \qquad (u,v)\longmapsto u\smile v,
+\]
+is graded commutative: $u\smile v=(-1)^{ab}v\smile u$. The ring structure
+carries more information than the separate groups \cite{hatcher2002}.
+
+\subsection{de Rham cohomology}
+
+Write $A^k(X,\C)$ for the smooth complex-valued $k$-forms on the manifold.
+They form the de Rham complex, with cohomology
+\[
+ H^k_{\mathrm{dR}}(X,\C)
+ =\frac{\ker(\dd:A^k(X,\C)\to A^{k+1}(X,\C))}
+ {\im(\dd:A^{k-1}(X,\C)\to A^k(X,\C))}.
+\]
+The de Rham theorem identifies it with $H^k(X,\C)$, compatibly with
+integration and products. A cohomology class is an equivalence class of
+closed forms modulo exact forms. It has no distinguished representative
+until a metric is chosen.
+
+Rationality is extra information. A complex de Rham class comes from
+$H^k(X,\Q)$ exactly when its integrals over integral $k$-cycles are rational
+\cite{griffithsharris1978}. Torsion cycles have zero periods, so they impose no condition.
+
+\subsection{Fundamental classes and the degree shift}
+
+For the compact oriented real $2n$-manifold $X$, Poincar\'e duality gives
+\[
+ \PD:H_{2n-k}(X,\Q)\xrightarrow{\sim}H^k(X,\Q).
+\]
+If $Z\subseteq X$ is a smooth closed subvariety of complex codimension $p$,
+then its real dimension is $2n-2p$. Its fundamental homology class has a
+Poincar\'e dual
+\begin{equation}\label{eq:cyclePD}
+ \cl(Z)=\PD([Z]_{\mathrm{hom}})\in H^{2p}(X,\Q).
+\end{equation}
+This is the reason that codimension $p$ corresponds to degree $2p$.
+
+The construction extends to singular irreducible subvarieties, which also
+have fundamental homology classes. Smoothness of $X$ does not require
+smoothness of the $Z_i$. One characterization is
+\begin{equation}\label{eq:integration}
+ \int_X \cl(Z)\smile[\eta]=\int_Z\eta
+\end{equation}
+for closed forms $\eta$ of real degree $2n-2p$, interpreted through the
+fundamental class, or integration over the regular locus, if $Z$ is singular.
+We use $[Z]$ for the cycle and $\cl(Z)$ for its cohomology class \cite{fulton1998,voisin2003hodge2}.
+
+\section{Hodge decomposition and rational Hodge classes}\label{sec:hodge}
+
+\subsection{Forms of type \texorpdfstring{$(a,b)$}{(a,b)}}
+
+In holomorphic coordinates $z_1,\ldots,z_n$, a form of type $(a,b)$ is a sum
+of terms
+\[
+ f_{I,J}(z,\bar z)\,
+ \dd z_{i_1}\wedge\cdots\wedge\dd z_{i_a}
+ \wedge\dd\bar z_{j_1}\wedge\cdots\wedge\dd\bar z_{j_b}.
+\]
+Its total degree is $a+b$. The exterior derivative decomposes as
+$\dd=\partial+\dbar$, with bidegrees $(1,0)$ and $(0,1)$.
+
+On a compact Riemannian manifold, Hodge theory assigns a unique harmonic
+representative to every de Rham cohomology class, once the metric is fixed.
+Harmonicity means annihilation by
+$\Delta_{\dd}=\dd\dd^*+\dd^*\dd$. On a compact K\"ahler manifold the
+K\"ahler identities give $\Delta_{\dd}=2\Delta_{\dbar}$, so harmonic forms
+split by type \cite{voisin2002hodge}. The companion notes derive the identities in
+holomorphic normal coordinates and give the harmonic proof of the
+decomposition \cite[\S\S5--6]{gaganotes}.
+
+\begin{theorem}[Hodge decomposition]
+For a compact K\"ahler manifold,
+\begin{equation}\label{eq:decomposition}
+ H^k(X,\C)=\bigoplus_{a+b=k}H^{a,b}(X),
+ \qquad \overline{H^{a,b}(X)}=H^{b,a}(X).
+\end{equation}
+The space $H^{a,b}(X)$ consists of de Rham classes admitting a closed
+representative of pure type $(a,b)$ and is naturally identified with
+Dolbeault cohomology $H^b(X,\Omega_X^a)$.
+\end{theorem}
+
+Although harmonic representatives depend on the K\"ahler metric, this
+decomposition depends on the complex structure and is independent of the
+chosen K\"ahler metric. The dimensions $h^{a,b}=\dim_{\C}H^{a,b}(X)$ are
+Hodge numbers, with $b_k=\sum_{a+b=k}h^{a,b}$.
+
+\subsection{The rational structure}
+
+Extension of coefficients gives
+\[
+ H^k(X,\Q)\otimes_{\Q}\C\cong H^k(X,\C).
+\]
+However, the individual Hodge summands need not be defined over $\Q$.
+In particular, $H^{p,p}(X)$ is a complex vector space, whereas
+$\Hdg^p(X)$ is the rational subspace specified by
+\eqref{eq:hodgeclasses}. Knowing $h^{p,p}$ alone does not determine the
+dimension of $\Hdg^p(X)$.
+
+The linear algebra is already visible for $\Q^2\subset\C^2$: a complex line
+of irrational slope contains no nonzero rational point.
+
+The Hodge filtration is
+\[
+ F^rH^k(X,\C)=\bigoplus_{a\geq r}H^{a,k-a}(X).
+\]
+Because a rational class is fixed by complex conjugation,
+\begin{equation}\label{eq:filtration}
+ \Hdg^p(X)=H^{2p}(X,\Q)\cap F^pH^{2p}(X,\C).
+\end{equation}
+Indeed, membership in $F^p$ and its conjugate forces both Hodge indices to
+be at least $p$. Since their sum is $2p$, both equal $p$ \cite{delignecmi2006}.
+
+\subsection{Hodge structures and Tate twists}
+
+A pure rational Hodge structure of weight $k$ is a finite-dimensional
+$\Q$-vector space $V$ with a decomposition
+$V_{\C}=\bigoplus_{a+b=k}V^{a,b}$ satisfying
+$\overline{V^{a,b}}=V^{b,a}$. Cohomology $H^k(X,\Q)$ is the principal
+example here. A morphism of Hodge structures is a rational linear map
+preserving these summands.
+
+The Tate Hodge structure $\Q(1)$ has weight $-2$ and type $(-1,-1)$.
+The twist
+\[
+ H^{2p}(X,\Q(p)):=H^{2p}(X,\Q)\otimes\Q(p)
+\]
+has weight zero, so a Hodge class becomes a class of type $(0,0)$.
+Equivalently,
+\[
+ \Hdg^p(X)\cong
+ \Hom_{\mathrm{HS}}\bigl(\Q(0),H^{2p}(X,\Q(p))\bigr).
+\]
+When compatible integral or de Rham normalizations are included, Tate twists
+carry conventional factors of $2\pi\ii$. Equation~\eqref{eq:main} uses
+the untwisted Betti cycle class \cite{deligne1982hodge}.
+
+\section{Sheaves, line bundles, and Chern classes}\label{sec:bundles}
+
+A \emph{sheaf} assigns data to open sets with restriction maps, so
+compatible local data glue uniquely. On $X^{\an}$, the sheaf $\OO_{X^{\an}}$
+consists of holomorphic functions, its units $\OO_{X^{\an}}^*$ are the
+nowhere-vanishing holomorphic functions, and $\Omega^a_{X^{\an}}$
+consists of holomorphic $a$-forms. Their algebraic counterparts are
+defined on Zariski open sets. Regular functions there are locally
+quotients of polynomials with nonvanishing denominator. Rational
+functions are specified on a dense open set and may have poles elsewhere.
+
+Sheaf cohomology $H^j(X,\mathcal F)$ measures obstructions to gluing local
+data. A short exact sequence of sheaves produces a long exact sequence
+of these groups. This is the formal fact used in the divisor proof.
+GAGA compares coherent sheaf cohomology on the projective scheme
+with that on its analytic space. In particular,
+$H^b(X,\Omega^a_{X/\C})\cong H^b(X^{\an},\Omega^a_{X^{\an}})$
+\cite{serre1956gaga,gaganotes}. Dolbeault theory computes the analytic group
+using smooth forms \cite{voisin2002hodge}:
+\[
+ H^b(X^{\an},\Omega^a_{X^{\an}})\cong
+ \frac{\ker(\dbar:A^{a,b}(X)\to A^{a,b+1}(X))}
+      {\im(\dbar:A^{a,b-1}(X)\to A^{a,b}(X))}.
+\]
+The denominator is zero when $b=0$.
+
+A \emph{line bundle} is a locally trivial family of one-dimensional complex
+vector spaces over $X$, with holomorphic or algebraic transition
+functions as appropriate. Isomorphism classes of line bundles form the
+Picard group under tensor product. Holomorphic transition functions identify
+$\Pic(X^{\an})$ with $H^1(X^{\an},\OO_{X^{\an}}^*)$. GAGA identifies this
+group with the algebraic Picard group $\Pic(X)$.
+A \emph{divisor} on smooth $X$ is an integral codimension-one cycle.
+It determines a line bundle $\OO_X(D)$. Conversely, a nonzero rational
+section of a line bundle gives a divisor of zeros and poles.
+
+For a rank-$r$ complex vector bundle $E$, the Chern classes
+$c_j(E)\in H^{2j}(X,\Z)$ are characteristic classes, with
+$c_0(E)=1$ and $c_j(E)=0$ for $j>r$. They are natural under pullback
+and satisfy the Whitney product formula for short exact sequences.
+For line bundles,
+\[
+ c_1(L\otimes M)=c_1(L)+c_1(M),\qquad
+ c_1(\OO_X(D))=\cl(D).
+\]
+An algebraic vector bundle on smooth $X$ also has Chern classes in
+$\CH^j(X)$, whose images under the cycle-class map are these cohomological
+Chern classes \cite{fulton1998}.
+
+On the spaces considered here, a coherent sheaf of modules over the
+structure sheaf locally has a finite presentation. Sheaves of sections of
+vector bundles are coherent. A coherent sheaf can also be supported on a
+proper subvariety. On a smooth projective variety, coherent sheaves have finite
+locally free resolutions, so one can define their Chern classes through
+such resolutions. A global resolution of this kind need not exist on a
+general compact K\"ahler manifold, a distinction relevant to the
+counterexamples discussed later \cite{voisin2002kahler}.
+
+An ample line bundle is one whose sufficiently high positive tensor
+power gives a projective embedding. Its first Chern class is an
+ample divisor class. The hyperplane bundle $\OO_{\PP^N}(1)$ is the
+basic example. Its sections are linear homogeneous equations, and the
+class of a hyperplane is its first Chern class.
+
+\section{Algebraic cycles and the cycle-class map}\label{sec:cycles}
+
+\subsection{Formal cycles, coefficients, and equivalence}
+
+\begin{definition}
+The group of codimension-$p$ algebraic cycles is the free abelian group
+\[
+ Z^p(X)=\bigoplus_{\substack{Z\subseteq X\ \mathrm{irreducible,\ closed}\\
+                              \operatorname{codim}_X Z=p}}\Z\,[Z].
+\]
+An element is a finite sum $z=\sum_i m_i[Z_i]$ with $m_i\in\Z$.
+A cycle with rational coefficients is an element of
+$Z^p(X)_{\Q}:=Z^p(X)\otimes_{\Z}\Q$.
+\end{definition}
+
+A component $Z_i$ of a codimension-$p$ cycle has dimension $n-p$.
+Divisors are codimension-one cycles. Zero-cycles are finite combinations
+of points and have codimension $n$. A cycle is \emph{effective} if its
+coefficients are nonnegative. The Hodge conjecture imposes no effectiveness
+requirement.
+
+Rational equivalence is generated by divisors of nonzero rational functions
+on irreducible subvarieties $W\subseteq X$ of codimension $p-1$, pushed
+forward to $X$. If $W$ is singular, these divisors may be defined using its
+normalization and pushforward. The quotient is the Chow group
+\[
+ \CH^p(X)=Z^p(X)/\!\sim_{\mathrm{rat}},
+ \qquad \CH^p(X)_{\Q}=\CH^p(X)\otimes\Q.
+\]
+The adjective ``rational'' refers to the rational functions used in the
+definition. Rationally equivalent cycles have the same cohomology class, and
+the kernel of the cycle-class map on $\CH^p(X)$ can still be nonzero. Fulton
+gives the formal construction and its functorial properties \cite{fulton1998}.
+
+\subsection{Why every algebraic cycle class is a Hodge class}
+
+\begin{proposition}\label{prop:necessary}
+An irreducible closed algebraic subvariety $Z\subseteq X$ of complex
+codimension $p$ determines an integral class whose complexification has type
+$(p,p)$. In particular, its rational class belongs to $\Hdg^p(X)$.
+\end{proposition}
+
+\begin{proof}[Geometric explanation]
+First suppose $Z$ is smooth. It has complex dimension $n-p$, so integration
+over $Z$ can detect a form of total degree $2n-2p$ only through its
+$(n-p,n-p)$ component. The cup product respects bidegree, so Poincar\'e
+duality pairs each Hodge summand perfectly with the complementary one.
+It follows that $\cl(Z)$ has only a $(p,p)$ component. For singular $Z$,
+integration over its regular locus gives a closed current of bidegree
+$(p,p)$ representing the same fundamental class. The fundamental class
+is integral, which also gives the asserted rationality.
+\end{proof}
+
+A current is a continuous linear functional on smooth test forms.
+In this sense integration over a subvariety defines a generalized
+differential form \cite{griffithsharris1978,voisin2003hodge2}.
+
+By linearity and invariance under rational equivalence, we obtain
+\begin{equation}\label{eq:cyclemap}
+ \cl^p_{\Q}:\CH^p(X)_{\Q}\longrightarrow\Hdg^p(X),
+ \qquad [z]\longmapsto\cl(z).
+\end{equation}
+The Hodge conjecture is exactly the assertion that this map is surjective
+for every $p$. Its image is also the image of the map from
+$Z^p(X)_{\Q}$. Passing to Chow groups lets us study its kernel
+modulo rational equivalence (Section~\ref{subsec:abel-jacobi}).
+
+\section{Equivalent formulations}
+
+Let
+\[
+ H^{2p}_{\mathrm{alg}}(X,\Q):=
+ \operatorname{span}_{\Q}\{\cl(Z):\operatorname{codim}_X Z=p\}.
+\]
+Proposition~\ref{prop:necessary} proves the inclusion
+\[
+ H^{2p}_{\mathrm{alg}}(X,\Q)\subseteq\Hdg^p(X).
+\]
+The conjecture predicts equality.
+
+There is also a useful denominator-clearing formulation. If
+$\alpha\in\Hdg^p(X)$, equation~\eqref{eq:main} is equivalent to the
+existence of an integer $N>0$ and an integral algebraic cycle $z$ such that
+\begin{equation}\label{eq:multiple}
+ N\alpha=\cl(z)\quad\text{in }H^{2p}(X,\Q).
+\end{equation}
+For an integral Hodge class $\beta$, the conjecture likewise implies that
+some positive multiple of $\beta$ is an integral algebraic cycle class,
+with equality even in integral cohomology after multiplying again to kill
+any torsion discrepancy. It does not imply that $\beta$ itself is algebraic
+integrally \cite{delignecmi2006}.
+
+Some points of interpretation follow directly from the statement. The
+conjecture produces an algebraic representative of a class. It says nothing
+about the other representatives of the same class, by differential forms or
+by topological cycles. The coefficients may be negative, so a Hodge class
+need not be the class of a single subvariety or of an effective cycle. The
+statement is one of existence: it gives no procedure for finding equations
+of the subvarieties and no bound on their degrees. Equality of cycle classes
+is weaker than rational equivalence, so the conjecture describes the image
+of the cycle-class map and leaves its kernel untouched.
+
+\section{Examples}\label{sec:examples}
+
+\subsection{Projective space}
+
+Let $h=c_1(\OO_{\PP^n}(1))$ be the hyperplane class. Then
+\[
+ H^*(\PP^n,\Q)=\Q[h]/(h^{n+1}),\qquad \deg h=2.
+\]
+A linear subspace $\PP^{n-p}\subset\PP^n$ has class $h^p$, so
+\[
+ \Hdg^p(\PP^n)=H^{2p}(\PP^n,\Q)=\Q h^p.
+\]
+Every $qh^p$ is represented by the rational cycle $q[\PP^{n-p}]$.
+So the conjecture holds for projective space, because the cohomology ring
+has explicit algebraic generators \cite{hatcher2002,griffithsharris1978}.
+
+\subsection{Plane curves}
+
+In $\PP^2_{\C}$, a projective curve $C$ of degree $d$ is a divisor with
+$\OO(C)\cong\OO(d)$. Consequently
+\[
+ \cl(C)=c_1(\OO(d))=d h.
+\]
+The smooth conic $z_0z_2-z_1^2=0$ has class $2h$. The union of two
+distinct lines, for example $z_0z_1=0$, also has class $2h$. The first
+curve is irreducible and smooth. The second is reducible and singular at
+the intersection point. Their common class records their degree.
+
+For a line $L$, the class $\tfrac12h$ is represented by the rational cycle
+$\tfrac12[L]$. It cannot be the class of an integral divisor on $\PP^2$,
+since those have integral degree. The class $-h$ is a Hodge class but
+cannot be represented by an effective divisor, whose degree is nonnegative.
+
+\subsection{An elliptic curve}
+
+An elliptic curve over $\C$ is a smooth projective curve of genus one
+with a chosen point. For such a curve $E$,
+\[
+ H^1(E,\C)=H^{1,0}(E)\oplus H^{0,1}(E),
+ \qquad h^{1,0}=h^{0,1}=1.
+\]
+This nonzero odd-degree cohomology cannot be the class of an algebraic
+subvariety: cycle classes have even degree. Meanwhile $H^2(E,\Q)$ is
+generated by the class of a point. The conjecture applies to the latter
+and makes no assertion that the former is generated by algebraic cycle
+classes.
+
+In even degree the same exclusion applies to type. By
+Proposition~\ref{prop:necessary}, a rational class of degree $2p$ whose
+complexification has a component outside $H^{p,p}$ is not algebraic.
+
+\subsection{K3 surfaces}
+
+A complex K3 surface is a compact simply connected complex surface with
+trivial canonical bundle. For a K3 surface $S$ one has $h^{1,1}(S)=20$. By
+Theorem~\ref{thm:11} below, the rational Hodge classes in degree two are
+the rational span of divisor classes. Its dimension is the Picard number
+$\rho(S)$, which takes every value from $1$ to $20$ among projective K3
+surfaces. So $h^{1,1}=20$ does not give twenty rationally independent
+divisor classes. What varies is the position of the rational lattice inside
+complex cohomology \cite{voisin2002hodge,huybrechts2016k3}.
+
+\section{Known cases}\label{sec:known}
+
+\subsection{The Lefschetz \texorpdfstring{$(1,1)$}{(1,1)} theorem}
+
+\begin{theorem}[Lefschetz $(1,1)$ theorem]\label{thm:11}
+On a smooth complex projective variety, every integral cohomology class
+whose complexification has type $(1,1)$ is the first Chern class of an
+algebraic line bundle, and hence the class of an integral divisor.
+Consequently the rational Hodge conjecture holds for $p=1$.
+\end{theorem}
+
+\begin{proof}
+Put $M=X^{\an}$. The analytic exponential sequence
+\[
+ 0\longrightarrow\Z\longrightarrow\OO_M
+ \xrightarrow{\ f\mapsto\exp(2\pi\ii f)\ }\OO_M^*
+ \longrightarrow1
+\]
+gives the exact sequence
+\[
+ \Pic(M)\xrightarrow{\ c_1\ }H^2(M,\Z)\longrightarrow H^2(M,\OO_M).
+\]
+Dolbeault theory identifies the last group with $H^{0,2}(M)$, and the map
+from integral cohomology is complexification followed by projection to this
+summand. Indeed, projection of a smooth form onto its $(0,\bullet)$
+component induces the map from the de Rham complex to the Dolbeault
+resolution of $\OO_M$. An integral class of type $(1,1)$ has zero $(0,2)$
+component, so by exactness it is the first Chern class of a holomorphic
+line bundle. Conversely, the complexification of an integral class is real,
+so vanishing of its $(0,2)$ component forces vanishing of its $(2,0)$
+component. The image of $c_1$ therefore consists exactly of the integral
+classes of type $(1,1)$.
+
+GAGA algebraizes the holomorphic line bundle on projective $X$
+\cite{serre1956gaga,gaganotes}. A nonzero rational section of the resulting
+algebraic line bundle $L$ gives a divisor $D$ with
+$c_1(L)=\cl(D)$. Multiplying a rational $(1,1)$ class by a suitable
+positive integer reduces the rational assertion to this integral case.
+\end{proof}
+
+The theorem covers integral torsion classes as well: their complexification
+is zero, and exactness places them in the image of $c_1$. Nothing comparable
+holds in higher codimension. No analogue of the exponential sequence
+classifies cycles there, and the integral statement fails
+(Section~\ref{sec:limits}) \cite{voisin2002hodge}.
+
+\subsection{Curve classes and Hard Lefschetz}
+
+Let $h$ be the class of an ample divisor and write $L(u)=h\smile u$.
+A positive multiple of $h$ is a hyperplane class for a projective
+embedding, so $h$ is represented by a K\"ahler form. Hard Lefschetz
+over $\C$ is proved in the companion notes by the action on harmonic
+forms \cite[\S7]{gaganotes}. Cup product by $h$ is defined over $\Q$,
+so the map that becomes an isomorphism after extension to $\C$ is
+already an isomorphism over $\Q$:
+\begin{equation}\label{eq:HL}
+ L^{n-k}:H^k(X,\Q)\xrightarrow{\sim}H^{2n-k}(X,\Q)
+ \qquad(0\leq k\leq n).
+\end{equation}
+Since $h$ has type $(1,1)$, for $n\geq2$ the isomorphism
+\[
+ L^{n-2}:H^2(X,\Q)\xrightarrow{\sim}H^{2n-2}(X,\Q)
+\]
+takes type $(1,1)$ to type $(n-1,n-1)$, and its inverse takes rational
+Hodge classes to rational $(1,1)$ classes. By Theorem~\ref{thm:11},
+the preimage of such a class is a rational divisor class. Its product with
+$h^{n-2}$ is algebraic, because the cycle-class map respects intersection
+products. Hence the rational Hodge conjecture holds for codimension
+$n-1$, that is, for one-dimensional cycles \cite{voisin2003hodge2}.
+
+\begin{example}[Curve classes on a smooth quintic]
+\label{ex:quintic}
+Let $X\subset\PP^4_{\C}$ be a smooth quintic threefold and
+$h=c_1(\OO_X(1))$. The companion notes compute
+$H^4(X,\Q)=\Q h^2$, with $h^2$ of type $(2,2)$, and
+$\int_X h^3=5$ \cite[\S8]{gaganotes}.
+The curve $C=X\cap H_1\cap H_2$ cut out by two general hyperplanes
+has class $\cl(C)=h^2$. Thus every rational Hodge class of degree four
+on $X$ is a rational multiple of $\cl(C)$.
+
+The integral picture is finer. The homological form of the weak Lefschetz
+theorem and Poincar\'e duality give
+$H^4(X,\Z)\cong H_2(X,\Z)\cong\Z$ \cite[Ch.~1]{voisin2003hodge2}. Let $\ell$ be the
+generator with $\int_X h\smile\ell=1$. Then $h^2=5\ell$, so the map
+\[
+ h\smile{-}:H^2(X,\Z)\longrightarrow H^4(X,\Z)
+\]
+has image of index five, and the Lefschetz argument represents $\ell$ only
+by the rational cycle $\tfrac15[C]$.
+
+On the quintic the denominator can be removed by other means. The lines on
+$X$ are the zeros of a section of the rank-six bundle
+$\operatorname{Sym}^5S^\vee$ on the six-dimensional Grassmannian of lines
+in $\PP^4$, where $S$ is the tautological subbundle. Its top Chern class is
+$2875\neq0$, so $X$ contains a line $R$ \cite[Ch.~6]{eisenbudharris2016}.
+Since $\int_X h\smile\cl(R)=\deg R=1$, we get $\cl(R)=\ell$. For
+hypersurfaces of other degrees the generator of $H^4(X,\Z)$ need not be
+algebraic (Section~\ref{sec:limits}).
+\end{example}
+
+\subsection{Consequences in small dimension}
+
+Codimension zero is generated by $[X]$, and top-degree cohomology of a
+connected $X$ is generated by a point. Together with the divisor and curve
+cases, this proves the rational Hodge conjecture for every smooth complex
+projective variety of dimension at most three. The first dimension where
+the general problem is not covered by these arguments is $n=4$, in
+codimension $p=2$ \cite{voisin2016hodge}.
+
+Some special fourfolds are understood. Zucker proved the rational Hodge
+conjecture for smooth cubic fourfolds $X\subset\PP^5_{\C}$, where the
+nontrivial case is $H^4(X,\Q)$ \cite{zucker1977}.
+
+\subsection{Abelian varieties}
+
+An abelian variety is a connected projective algebraic group. Over $\C$,
+its analytification is a complex torus with a polarization from an ample
+line bundle. Its cohomology is the exterior algebra on $H^1$, and its Hodge
+classes need not be generated by divisor classes. The basic examples are
+the Weil classes, which arise when an imaginary quadratic field acts on an
+abelian variety of even dimension with balanced action on the holomorphic
+tangent space.
+
+Markman proved that the Weil classes on abelian sixfolds of Weil type of a
+fixed discriminant are algebraic, for every imaginary quadratic field,
+using secant sheaves and deformation methods. By a degeneration argument of
+Schoen this gives the Weil classes on all abelian fourfolds of Weil type,
+and the Hodge conjecture for abelian fourfolds follows \cite{markman2025}.
+Voisin's Bourbaki expos\'e explains how the same input, with reductions due
+to Moonen and Zarhin, gives the Hodge conjecture for complex abelian
+varieties of dimension at most five
+\cite[Th\'eor\`eme~1.3]{voisin2026bourbaki}.
+
+The general rational Hodge conjecture remains open \cite{cmihodge}.
+
+\section{Significance}\label{sec:importance}
+
+\subsection{A criterion for algebraicity}
+
+The conjecture would identify the algebraic part of rational cohomology
+using two pieces of data: the rational structure and the Hodge
+decomposition. The implication already known is
+\[
+ \text{algebraic cycle class}\ \Longrightarrow\
+ \text{rational class of type }(p,p).
+\]
+Its conjectural converse is an existence statement. A class found by
+analytic or cohomological reasoning would force algebraic subvarieties to
+exist before any equations for them were known \cite{cmihodge}.
+
+The criterion works at the level of rational cycle classes. It would not
+recover the equations of $X$ or single out a cycle, since many cycles share
+a class, as the conics of Section~\ref{sec:examples} show.
+
+\subsection{Intersection theory}
+
+For properly intersecting subvarieties, cup products of cycle classes
+encode their intersection cycle classes. In complementary dimensions,
+integrating the cup product gives an intersection number. For example,
+two plane curves of degrees $d$ and $e$ with no common component have
+intersection number
+\[
+ \int_{\PP^2}(dh)\smile(eh)=de,
+ \qquad \int_{\PP^2}h^2=1.
+\]
+The intersection multiplicities are essential when intersections are
+not transverse. Refined intersection theory extends these constructions
+beyond the naive set-theoretic intersection \cite{fulton1998}.
+
+If the conjecture holds, every rational Hodge class takes part in this
+intersection theory as an algebraic cycle class. Cycles with the same
+cohomology class, or the same intersection numbers, still need not be
+rationally equivalent.
+
+\subsection{Correspondences}
+
+For smooth projective $X,Y$ with $\dim X=n$, a codimension-$r$ cycle
+$\Gamma$ on $X\times Y$ acts by
+\begin{equation}\label{eq:correspondence}
+ \Gamma_*(u)=(\operatorname{pr}_Y)_*
+ \bigl(\operatorname{pr}_X^*u\smile\cl(\Gamma)\bigr)
+ \in H^{k+2r-2n}(Y,\Q),\quad u\in H^k(X,\Q).
+\end{equation}
+Pullback, cup product, and integration along fibers explain the degree
+shift. Such a cycle is an algebraic correspondence. When $r=n$, its
+action preserves degree and Hodge type.
+
+By K\"unneth decomposition and Poincar\'e duality, a rational morphism
+of Hodge structures $H^k(X,\Q)\to H^k(Y,\Q)$ determines a rational
+$(n,n)$-class in the appropriate summand of $H^{2n}(X\times Y,\Q)$.
+The Hodge conjecture for the product would make that class algebraic,
+realizing the map by a correspondence. This is why the conjecture for
+products matters: it would give a geometric origin to every morphism of
+Hodge structures between the cohomology groups of two varieties
+\cite{voisin2025coniveau}.
+
+Buskin's theorem is an instance. Every rational Hodge isometry between the
+degree-two cohomologies of two projective K3 surfaces is induced by an
+algebraic correspondence \cite{buskin2019}. An isometry here is a map
+preserving the intersection form.
+
+\subsection{Motives and the Tate conjecture}
+
+The theory of motives seeks a framework in which varieties are compared
+using algebraic correspondences and different cohomology theories appear
+as realizations of common geometric objects. The Hodge conjecture would
+ensure that certain Hodge-theoretic relations come from actual
+correspondences, one of the properties sought in a theory of motives \cite{delignecmi2006}.
+
+Over arithmetic fields, the Tate conjecture asks for an analogous
+algebraicity criterion using Galois-invariant $\ell$-adic cohomology
+classes, with a Tate twist. For a variety over a finite field, suitable
+Frobenius-invariant classes play the role occupied here by Hodge classes.
+Both conjectures ask which cohomology classes have an algebraic origin.
+They are different statements, and neither is known to imply the other in
+general \cite{tate1965,milne2008tate}.
+
+\section{Integral, K\"ahler, and singular variants}\label{sec:limits}
+
+\subsection{Integral coefficients}
+
+For integral coefficients, define
+\[
+ \Hdg^p(X,\Z):=
+ \{\beta\in H^{2p}(X,\Z):\beta_{\C}\in H^{p,p}(X)\}.
+\]
+This preimage definition is necessary because the map from integral to
+complex cohomology kills torsion and need not be injective. Every torsion
+class belongs to this group, since its complexification is zero.
+
+One might ask whether $\CH^p(X)\to\Hdg^p(X,\Z)$ is always surjective.
+Atiyah and Hirzebruch showed that the answer is negative: algebraic cycle
+classes satisfy additional topological constraints, invisible to the
+Hodge-type condition, and some integral Hodge classes violate them
+\cite{atiyahhirzebruch1962}. Torsion is a fundamental source of this failure.
+
+Failure is not confined to torsion classes. Let $X\subset\PP^4_{\C}$ be a
+very general hypersurface of degree $d$, and let $\ell$ generate
+$H^4(X,\Z)\cong\Z$ with $\int_X h\smile\ell=1$, as in
+Example~\ref{ex:quintic}, so that $h^2=d\,\ell$. Koll\'ar showed that if
+$p^3$ divides $d$ for a prime $p\geq5$, then every curve on $X$ has degree
+divisible by $p$. In that case $\ell$ is a non-torsion integral Hodge class
+that is not algebraic, although $d\,\ell=\cl(C)$ is, for a plane section
+$C$ \cite{voisin2006integral}. The rational conjecture is unaffected, since
+$\ell=\tfrac1d\cl(C)$ in $H^4(X,\Q)$.
+
+\subsection{Compact K\"ahler manifolds}
+
+Compact K\"ahler manifolds still have Hodge decomposition, so it is
+natural to ask for an analogous algebraicity statement there. In that
+setting one must replace algebraic subvarieties by closed complex
+analytic subvarieties, or consider Chern classes of suitable analytic
+objects. Unrestricted extensions of this kind fail. Voisin constructs
+compact K\"ahler examples where even rational Hodge classes are not
+generated by the Chern classes of coherent analytic sheaves
+\cite{voisin2002kahler}.
+
+On a projective variety every closed analytic subvariety is algebraic by
+Chow's theorem \cite{chow1949,gaganotes}, so there the analytic and algebraic
+forms of the question coincide.
+
+\subsection{Singular and open varieties}
+
+For singular or noncompact algebraic varieties, ordinary cohomology has
+in general a mixed Hodge structure in place of the pure structure above.
+A mixed Hodge structure has an increasing rational weight filtration
+$W_\bullet$ and a decreasing complex Hodge filtration $F^\bullet$,
+such that each graded piece $\operatorname{Gr}^W_k$ is a pure Hodge
+structure of weight $k$.
+Poincar\'e duality also requires modification. Analogues of the conjecture
+can be formulated with mixed Hodge theory, homology, or intersection
+cohomology, each with its own hypotheses \cite{voisin2003hodge2,voisin2025coniveau}.
+
+\section{Further directions}\label{sec:research}
+
+\subsection{Why Hodge theory does not produce cycles}
+
+Hodge theory decomposes a finite-dimensional vector space and describes how
+the decomposition varies. Finding a cycle means finding closed
+subvarieties, with whatever singularities, degrees, and deformation
+behaviour they have. Nothing turns a harmonic $(p,p)$-form into the zero
+set of polynomial equations.
+
+The codimension-one proof works because line bundles are controlled by
+the exponential sequence. In higher codimension, coherent sheaves and
+their Chern classes, deformation theory, and normal functions are partial
+substitutes, and none of them produces every Hodge class
+\cite{voisin2016hodge}.
+
+\subsection{Hodge loci and variation in families}
+
+Let $f:\mathcal X\to S$ be a smooth projective family over a smooth
+complex algebraic base. Locally, the groups $H^{2p}(X_s,\Q)$ form a
+constant system of vector spaces, while the Hodge filtration varies
+holomorphically. Parallel transport can move a rational class between
+nearby fibers, but the class need not stay of type $(p,p)$.
+
+The Hodge locus records where such classes acquire or retain the required
+type. Cattani, Deligne, and Kaplan proved that the Hodge locus in the
+base is a countable union of closed algebraic subvarieties
+\cite{cdk1995}. Monodromy must be accounted for when tracking one class
+globally. It controls whether a locally fixed class defines a global
+section of the cohomology local system.
+
+This is what the Hodge conjecture predicts. The locus where a class is
+algebraic is a countable union of algebraic subvarieties, by the theory of
+Hilbert schemes. The theorem is unconditional evidence for the conjecture,
+though it constructs no cycles.
+
+\subsection{Homologically trivial cycles and Abel--Jacobi theory}
+\label{subsec:abel-jacobi}
+
+Write
+\[
+ \CH^p(X)_{\Q,\mathrm{hom}}
+ :=\ker\bigl(\cl^p_{\Q}:\CH^p(X)_{\Q}\to H^{2p}(X,\Q)\bigr).
+\]
+Elements of this group have zero rational cohomology class but need not
+vanish modulo rational equivalence. Abel--Jacobi maps and intermediate
+Jacobians detect some information discarded by the cycle-class map.
+At the integral level, the intermediate Jacobian relevant to codimension
+$p$ is the complex torus
+\[
+ J^p(X)=\frac{H^{2p-1}(X,\C)}
+ {F^pH^{2p-1}(X,\C)+\im H^{2p-1}(X,\Z)}.
+\]
+The integral Abel--Jacobi map is defined on cycles with vanishing integral
+cohomology class, modulo rational equivalence. Tensoring the domain
+and target with $\Q$ gives the corresponding rational map.
+The Abel--Jacobi map refines the information about the kernel. It is
+independent of the conjectured surjectivity in degree $2p$
+\cite{voisin2003hodge2}.
+
+\subsection{Absolute Hodge classes}
+
+Absolute Hodge theory asks whether a Hodge class remains a Hodge class
+under all field automorphisms of $\C$, using the appropriate de Rham
+comparison to transport it to the conjugate variety. Algebraic cycles
+give absolute Hodge classes. Deligne proved that Hodge classes on
+complex abelian varieties are absolute Hodge \cite{deligne1982hodge}.
+
+Absolute Hodge is weaker than algebraic. Deligne's theorem shows that Hodge
+classes on abelian varieties behave under automorphisms of $\C$ as algebraic
+classes would. It leaves the existence of cycles open.
+
+\subsection{The generalized Hodge conjecture}
+
+The ordinary conjecture concerns degree-$2p$ classes supported, via cycle
+classes, on algebraic sets of codimension $p$. A broader question asks
+which parts of $H^k(X,\Q)$ can be supported on subsets of prescribed
+codimension. The geometric coniveau is the following sum over closed
+algebraic subsets $Z\subseteq X$:
+\[
+ N^cH^k(X,\Q)=
+ \sum_{\operatorname{codim}_X Z\geq c}
+ \ker\bigl(H^k(X,\Q)\to H^k(X\setminus Z,\Q)\bigr).
+\]
+A rational Hodge substructure has Hodge coniveau at least $c$ when its
+complexification has no components of type $(a,b)$ with $a<c$ or $b<c$.
+Let $M^cH^k$ be the largest rational Hodge substructure with that property.
+The generalized Hodge conjecture predicts
+\[
+ N^cH^k(X,\Q)=M^cH^k(X,\Q).
+\]
+The inclusion $N^cH^k\subseteq M^cH^k$ is known, and the converse is the
+content of the conjecture. The condition has to be imposed on a rational
+Hodge substructure. Hodge's original version, stated for individual
+classes, is false, as Grothendieck observed
+\cite{grothendieck1969,voisin2025coniveau}.
+
+\appendix
+\section{Notation and degree checks}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}lX@{}}\toprule
+Notation & Meaning \\ \midrule
+$n$ & Complex dimension of the smooth projective ambient variety $X$.\\
+$p$ & Complex codimension of a cycle with components of dimension $n-p$.\\
+$X^{\an}$ & The associated compact complex manifold, of real dimension $2n$.\\
+$H^k(X,R)$ & Singular cohomology with coefficient ring or field $R$.\\
+$H^{a,b}(X)$ & Hodge summand in complex cohomology of total degree $a+b$.\\
+$\Hdg^p(X)$ & Rational classes in $H^{2p}$ whose complexifications have type $(p,p)$.\\
+$Z^p(X)_{\Q}$ & Finite formal rational combinations of codimension-$p$ subvarieties.\\
+$\CH^p(X)_{\Q}$ & The same cycles modulo rational equivalence.\\
+$\cl(Z)$ & The cohomology class of a subvariety, in degree $2p$.\\
+$h$ & An ample divisor class, of degree $2$ and Hodge type $(1,1)$.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+The two central degree calculations are
+\[
+ \dim_{\R}Z=2(n-p),\qquad
+ \deg\PD([Z]_{\mathrm{hom}})=2n-2(n-p)=2p,
+\]
+and, for curve classes,
+\[
+ 2+2(n-2)=2n-2,\qquad
+ (1,1)+(n-2,n-2)=(n-1,n-1).
+\]
+
+\section{Suggested route through the references}
+
+For a first reading, study the definitions of projective varieties,
+cohomology, and Poincar\'e duality, then the Hodge decomposition and the
+examples in Section~\ref{sec:examples}. Next read the divisor proof in
+Section~\ref{sec:known} and Deligne's official description
+\cite{delignecmi2006}. For deeper study, use Voisin's two volumes
+\cite{voisin2002hodge,voisin2003hodge2} together with Fulton \cite{fulton1998}. The surveys
+\cite{voisin2016hodge,voisin2025coniveau} lead into coniveau, families, and motives.
+For the recent abelian-variety results, pair Markman's primary preprint
+\cite{markman2025} with Voisin's Bourbaki exposition
+\cite{voisin2026bourbaki}.
+
+\bibliographystyle{amsalpha}
+\bibliography{references}
+\end{document}
+
+%%% Local Variables:
+%%% mode: LaTeX
+%%% TeX-master: t
+%%% End:

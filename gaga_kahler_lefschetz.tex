@@ -1,0 +1,1496 @@
+% Draft 7 (revised), 12 November 2026.
+% Bibliography: references.bib, shared with the companion paper hodge_classes_algebraic_cycles.tex.
+
+\documentclass[11pt,reqno]{amsart}
+
+% ----------------------------------------------------------------------
+% Packages
+% ----------------------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{microtype}
+\usepackage[a4paper,margin=1.15in]{geometry}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!60!black,
+  citecolor=blue!60!black,
+  urlcolor=blue!60!black,
+  pdftitle={Notes on Analytification, GAGA, Kaehler Identities, and Lefschetz Theory}
+}
+
+\setlist[enumerate]{label=(\roman*),leftmargin=2.2em}
+
+% ----------------------------------------------------------------------
+% Theorem environments
+% ----------------------------------------------------------------------
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% ----------------------------------------------------------------------
+% Commands
+% ----------------------------------------------------------------------
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\AAA}{\mathbb{A}}
+\newcommand{\OO}{\mathcal{O}}
+\newcommand{\Xan}{X^{\mathrm{an}}}
+\newcommand{\Fan}{\mathcal{F}^{\mathrm{an}}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\ii}{\mathrm{i}}
+\newcommand{\dbar}{\bar\partial}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\Pic}{Pic}
+\DeclareMathOperator{\Coh}{Coh}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\divergence}{div}
+\DeclareMathOperator{\id}{id}
+
+% ----------------------------------------------------------------------
+% Document information
+% ----------------------------------------------------------------------
+\title[Analytification, GAGA, and Lefschetz Theory]
+{Notes on Analytification, GAGA, K\"ahler Identities,\\
+  and Lefschetz Theory}
+\author{Jhune Yim}
+\email{jhune\_yim@protonmail.com}
+\date{12 November 2026}
+\subjclass[2020]{Primary 32Q15; Secondary 14C30, 14F25, 14J32, 32C35}
+\keywords{Analytification, GAGA, K\"ahler identities, Hodge decomposition,
+  Hard Lefschetz theorem, quintic threefold}
+
+\begin{document}
+\raggedbottom
+
+\begin{abstract}
+Analytification gives a smooth projective complex variety a compact K\"ahler
+manifold structure. Starting with the analytification functor and GAGA, we
+derive the K\"ahler commutation identities in holomorphic normal coordinates
+and use $\Delta_{\dd}=2\Delta_{\dbar}$ to obtain the Hodge decomposition
+from the elliptic Hodge theorem. The Lefschetz operators on harmonic forms
+give a finite-dimensional $\mathfrak{sl}_2$ representation with
+$L^*=\Lambda$. Its weight strings yield Hard Lefschetz and the primitive
+decomposition. For a smooth quintic threefold we compute the Hodge diamond
+and exhibit the index of the integral Lefschetz map in degree two.
+\end{abstract}
+
+\maketitle
+
+\setcounter{tocdepth}{1}
+\tableofcontents
+
+\section{Introduction}
+\label{sec:intro}
+
+Over $\C$, polynomial equations define schemes and give their sets of complex
+points the structure of analytic spaces. The analytification functor relates
+these constructions. When the scheme is proper, GAGA compares coherent
+algebraic and analytic sheaves and their cohomology. Smooth projective schemes
+have a second feature: restricting the Fubini--Study form gives their
+analytifications a K\"ahler metric.
+
+We use these facts in two ways. GAGA identifies the algebraic groups
+$H^q(X,\Omega^p_{X/\C})$ with the corresponding analytic coherent cohomology
+groups. On the compact K\"ahler manifold, the K\"ahler identities identify
+the harmonic spaces that realize those groups as Hodge summands. The same
+identities make the Lefschetz operators preserve harmonic forms. This puts the
+proof of Hard Lefschetz within the linear algebra of an $\mathfrak{sl}_2$ action
+\cite{griffithsharris1978,voisin2002hodge,huybrechts2005complex}.
+
+The smooth quintic illustrates the two comparisons. Algebraic adjunction
+determines $h^{3,0}$, the hyperplane class determines the degree-four Hodge
+summand, and the tangent bundle gives the Euler characteristic. The companion
+notes \cite{hodgenotes} use the resulting degree-four calculation to
+represent the generator of $H^4$ by a curve: rationally by a plane section,
+and integrally by a line.
+
+\subsection{Conventions}
+\label{subsec:conventions}
+
+We allow non-Hausdorff complex analytic spaces, as required for the
+analytification of nonseparated schemes. We use \emph{complex manifold}
+for a Hausdorff space with holomorphic manifold charts and a countable base.
+The notation for cohomology depends on the coefficient object.
+\begin{enumerate}
+  \item $H^i(X,\mathcal F)$ denotes Zariski sheaf cohomology on the scheme $X$.
+  \item $H^i(\Xan,\mathcal G)$ denotes analytic sheaf cohomology.
+  \item $H^k(\Xan,A)$, for $A\in\{\Z,\Q,\R,\C\}$, denotes singular
+  cohomology of the underlying topological space.
+\end{enumerate}
+From \cref{sec:kahler-identities} onward, the ambient object is a K\"ahler
+manifold, again denoted by $X$. When it is the analytification of an algebraic
+scheme, this is stated explicitly. We put
+\[
+b_k=\dim_{\R}H^k(X,\R),
+\qquad
+h^{p,q}=\dim_{\C}H^{p,q}(X).
+\]
+\Cref{sec:limits} records the foundational results used without proof.
+
+\section{Complex Algebraic Varieties and Analytification}
+\label{sec:analytification}
+
+\subsection{Algebraic varieties over \texorpdfstring{$\C$}{C}}
+
+\begin{definition}[Complex algebraic variety]
+\label{def:variety}
+A \emph{complex algebraic variety} is an integral, separated scheme of finite
+type over $\C$.
+\end{definition}
+
+Here \emph{integral} means nonempty, irreducible, and reduced. Finite type
+implies that $X$ has an affine open cover by schemes $\Spec A$ with
+\[
+A\cong\C[x_1,\dots,x_N]/I
+\]
+for a finitely generated ideal $I$. Separatedness means that the diagonal
+\[
+\Delta_X:X\longrightarrow X\times_{\C}X
+\]
+is a closed immersion. It is the algebraic counterpart of Hausdorffness in the
+precise sense of \cref{prop:sep-proper}, although the Zariski topology itself is
+not Hausdorff in positive dimension.
+
+\begin{remark}
+\label{rem:conventions-variety}
+Terminology varies. Some authors use \emph{variety} for every reduced
+finite-type scheme, without irreducibility. Analytification itself requires
+neither integrality nor reducedness, so several results below are stated for
+arbitrary finite-type $\C$-schemes.
+\end{remark}
+
+\subsection{The analytification functor}
+
+Let
+\[
+X=\Spec\bigl(\C[z_1,\dots,z_N]/I\bigr).
+\]
+Its complex points are
+\[
+X(\C)=\{a\in\C^N:f(a)=0\text{ for every }f\in I\},
+\]
+with the subspace topology from $\C^N$, and with structure sheaf
+\[
+\OO_{\Xan}
+=\bigl(\OO_{\C^N}/I\OO_{\C^N}\bigr)\big|_{X(\C)}.
+\]
+If $I$ is not radical, this sheaf retains nilpotents. Analytification does not
+silently replace a scheme by its reduction.
+
+\begin{theorem}[Analytification, {\cite[Exp.~XII, Thm.\ and Def.~1.1]{sga1}}]
+\label{thm:analytification}
+There is a functor
+\[
+(\cdot)^{\mathrm{an}}:
+\{\text{schemes locally of finite type over }\C\}
+\longrightarrow
+\{\text{complex analytic spaces}\}
+\]
+assigning to $X$ a complex analytic space $\Xan$ and a morphism of locally
+ringed spaces over $\C$
+\[
+\rho_X:\Xan\longrightarrow X,
+\]
+characterized by the property that for every complex analytic space $Z$,
+composition with $\rho_X$ induces a natural bijection
+\[
+\Hom_{\mathrm{An}}(Z,\Xan)
+\xrightarrow{\sim}
+\Hom_{\mathrm{LRS}/\C}(Z,X).
+\]
+If $X$ is of finite type over $\C$, the points of $\Xan$ are naturally
+identified with the closed points of $X$, equivalently with $X(\C)$. Locally,
+when $X$ is closed in $\AAA^N_{\C}$, its analytic topology and structure sheaf
+are the ones described above.
+\end{theorem}
+
+The identification of points uses the Nullstellensatz: every closed point of a
+finite-type $\C$-scheme has residue field $\C$.
+
+\begin{remark}
+\label{rem:topologies}
+On the common set $X(\C)$, the analytic topology is finer than the topology
+induced from the Zariski topology. If $X$ is irreducible and
+positive-dimensional, it is strictly finer. A proper Zariski-closed subset
+has smaller dimension than $X$ at each of its points, so it has empty
+analytic interior, and every nonempty Zariski-open subset is analytically
+dense. A small coordinate ball around a smooth point of the reduction is
+analytically open and not dense, hence not Zariski-open.
+\end{remark}
+
+\begin{proposition}
+\label{prop:sep-proper}
+Let $X$ be of finite type over $\C$.
+\begin{enumerate}
+  \item $X$ is separated over $\C$ if and only if $\Xan$ is Hausdorff.
+  \item $X$ is proper over $\C$ if and only if $\Xan$ is compact and
+  Hausdorff.
+\end{enumerate}
+\end{proposition}
+
+See \cite[Exp.~XII, Prop.~3.1(viii) and Prop.~3.2(v)]{sga1}.
+
+\begin{proposition}
+\label{prop:smooth-manifold}
+Let $X$ be a finite-type $\C$-scheme, smooth of pure dimension $d$. Then
+$\Xan$ has local holomorphic manifold charts of dimension $d$. If $X$ is
+separated, $\Xan$ is a complex manifold. If $X$ is projective, $\Xan$ is
+also compact.
+\end{proposition}
+
+\begin{proof}
+In an affine embedding into $\AAA^N_{\C}$, smoothness gives $N-d$
+local defining equations with independent differentials at a given closed
+point. The holomorphic implicit-function theorem gives the charts. For
+separated $X$, \cref{prop:sep-proper} gives Hausdorffness. A finite affine
+open cover gives a countable base, since each analytic affine chart has
+the subspace topology from a complex affine space. For projective $X$,
+the analytification is closed in $\PP^N(\C)$ for some $N$, so it is compact.
+\end{proof}
+
+Separatedness cannot be dropped from the second statement. Gluing two copies
+of $\AAA^1_{\C}$ along the punctured affine line by the identity gives a
+smooth scheme of pure dimension one. In the analytification
+every neighborhood of either origin meets the common punctured line in
+a punctured disk around zero. The two origins therefore have no disjoint
+neighborhoods.
+
+\begin{example}[An affine plane curve]
+\label{ex:curve}
+Let
+\[
+X=\Spec\bigl(\C[x,y]/(y^2-x^3+x)\bigr).
+\]
+Then $\Xan\subset\C^2$ is the analytic curve $y^2=x^3-x$. The restriction of
+$e^x$ is holomorphic. If it were regular, it would belong to the invariant
+part of $\C[x,y]/(y^2-x^3+x)$ under $y\mapsto-y$, namely $\C[x]$. Since the
+projection to the $x$-line is surjective, this would make $e^x$ a polynomial
+on $\C$. Thus the coherent cohomology comparison in degree zero can fail
+for affine schemes.
+\end{example}
+
+\section{Serre's GAGA Principle}
+\label{sec:gaga}
+
+For a coherent algebraic sheaf $\mathcal F$, define its analytification by
+\[
+\Fan=\rho_X^*\mathcal F
+=\OO_{\Xan}\otimes_{\rho_X^{-1}\OO_X}\rho_X^{-1}\mathcal F.
+\]
+
+\begin{theorem}[GAGA]
+\label{thm:gaga}
+Let $X$ be a proper scheme over $\C$. Analytification induces an equivalence
+\[
+\Coh(X)\xrightarrow{\sim}\Coh(\Xan),
+\]
+and for every coherent sheaf $\mathcal F$ on $X$ and every $i\geq0$, the
+comparison morphism
+\[
+H^i(X,\mathcal F)\longrightarrow H^i(\Xan,\Fan)
+\]
+is an isomorphism of finite-dimensional $\C$-vector spaces.
+\end{theorem}
+
+Serre proved the comparison for projective varieties
+\cite[\S12, Thms.~1--3]{serre1956gaga}. For proper schemes, Expos\'e XII of
+SGA~1 gives the cohomology comparison in Corollary~4.3 and the equivalence
+in Theorem~4.4 \cite{sga1}.
+
+\begin{lemma}[Faithful flatness of analytification]
+\label{lem:flat}
+For $x\in\Xan$ and $y=\rho_X(x)$, the local homomorphism
+\[
+A=\OO_{X,y}\longrightarrow B=\OO_{\Xan,x}
+\]
+is faithfully flat. Consequently, analytification is exact on coherent
+sheaves, and local freeness of a coherent sheaf, including its rank, may be
+tested after analytification.
+\end{lemma}
+
+\begin{proof}
+The rings $A$ and $B$ are Noetherian local rings. In the affine model at
+$a\in\C^N$, the polynomial and convergent power series presentations both
+complete to $\C[[z-a]]/(I)$. Thus the natural map on completions
+$\widehat A\to\widehat B$ is an isomorphism
+\cite[Exp.~XII, Thm.\ and Def.~1.1]{sga1}. The composite
+$A\to B\to\widehat B\cong\widehat A$ is flat, and
+$B\to\widehat B$ is faithfully flat. Hence $A\to B$ is flat. As a flat
+local map of local rings it is faithfully flat.
+
+Exactness follows by tensoring stalkwise with $B$. A coherent module is
+finitely presented, so its finite projectivity descends under faithfully
+flat base change. Finite projective modules over a local ring are free,
+with rank preserved by base change. The locally free locus of a coherent
+sheaf is open, and every nonempty closed subset of a finite-type
+$\C$-scheme contains a closed point. Thus it suffices to test local freeness
+at the algebraic stalks corresponding to analytic points.
+\end{proof}
+
+\begin{corollary}
+\label{cor:gaga}
+Let $X$ be proper over $\C$.
+\begin{enumerate}
+  \item Every coherent analytic sheaf $\mathcal G$ on $\Xan$ admits an
+  algebraization $(\mathcal F,\phi)$, where $\mathcal F$ is coherent algebraic
+  and $\phi:\Fan\xrightarrow{\sim}\mathcal G$. Two such pairs have a unique
+  isomorphism compatible with the specified identifications.
+  \item Every closed analytic subspace of $\Xan$ is the analytification of a
+  unique closed algebraic subscheme of $X$.
+  \item Every holomorphic vector bundle on $\Xan$ is the analytification of an
+  algebraic vector bundle on $X$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+For (i), essential surjectivity gives the pair $(\mathcal F,\phi)$. For two
+such pairs, full faithfulness lifts the isomorphism
+$(\phi')^{-1}\phi$ uniquely to an algebraic isomorphism. For (ii), a closed
+analytic subspace is determined by a coherent ideal
+$\mathcal I\subseteq\OO_{\Xan}$. By GAGA, both $\mathcal I$ and its inclusion
+into $\OO_{\Xan}$ descend uniquely to a coherent sheaf $\mathcal J$ and a
+morphism $\mathcal J\to\OO_X$. Exactness and faithfulness of analytification
+show that this morphism is injective, so $\mathcal J$ is an ideal sheaf. For
+(iii), GAGA algebraizes the coherent locally free sheaf of holomorphic
+sections, and \cref{lem:flat} descends its local freeness and rank.
+\end{proof}
+
+Applying (iii) in rank one, and using full faithfulness for isomorphisms,
+gives the comparison $\Pic(X)\cong\Pic(\Xan)$.
+
+\begin{remark}[Chow's theorem]
+\label{rem:chow}
+A closed analytic subset of $\PP^N(\C)$ is algebraic \cite{chow1949}. This is
+the reduced form of \cref{cor:gaga}\,(ii). In the affine line the zero set
+of $\sin z$ is an infinite discrete closed analytic subset, whereas every
+proper Zariski-closed subset is finite.
+\end{remark}
+
+\section{Smooth Projective Varieties as K\"ahler Manifolds}
+\label{sec:kahler}
+
+Let $(M,J)$ be a complex manifold. A Riemannian metric $g$ is \emph{Hermitian}
+if $g(Ju,Jv)=g(u,v)$ for all real tangent vectors $u,v$.
+
+\begin{definition}[K\"ahler manifold]
+\label{def:kahler}
+The fundamental form of a Hermitian manifold $(M,J,g)$ is
+\[
+\omega(u,v)=g(Ju,v).
+\]
+It is a real differential form of type $(1,1)$. The metric is \emph{K\"ahler}
+if $\dd\omega=0$. In that case $\omega$ is called the K\"ahler form.
+\end{definition}
+
+On the affine chart $Z_0\neq0$ of $\PP^N(\C)$, with $z_j=Z_j/Z_0$, put
+\[
+\omega_{\mathrm{FS}}
+=\frac{\ii}{2\pi}\,\partial\dbar
+\log\left(1+\sum_{j=1}^N|z_j|^2\right).
+\]
+The local potentials differ on overlaps by the logarithm of the squared norm
+of a nowhere-vanishing holomorphic function, so these forms glue to a global
+positive closed real $(1,1)$-form. With this normalization,
+$\int_{\PP^1}\omega_{\mathrm{FS}}=1$.
+
+\begin{theorem}
+\label{thm:proj-kahler}
+Let $X$ be a smooth projective $\C$-scheme of pure dimension. Then $\Xan$ is a
+compact K\"ahler manifold. Its K\"ahler class may be chosen in the image of
+\[
+H^2(\Xan,\Z)\longrightarrow H^2(\Xan,\R).
+\]
+\end{theorem}
+
+\begin{proof}
+Choose a closed immersion $X\hookrightarrow\PP^N_{\C}$. Then $\Xan$ is a compact
+complex submanifold of $\PP^N(\C)$. The restriction of
+$\omega_{\mathrm{FS}}$ is closed, real, of type $(1,1)$, and positive on every
+complex tangent space, hence K\"ahler. Its cohomology class is the restriction of
+the integral hyperplane class. Indeed, for $N\geq1$, the integral of a
+degree-two class over a projective line determines its coefficient in
+the hyperplane basis of $H^2(\PP^N(\C),\Z)$.
+\end{proof}
+
+\begin{remark}[Kodaira embedding]
+\label{rem:kodaira}
+A compact K\"ahler manifold is projective if and only if it has a K\"ahler
+class in the image of $H^2(M,\Z)\to H^2(M,\R)$, equivalently if it possesses
+a positive holomorphic line bundle \cite[\S5.3]{huybrechts2005complex}.
+A very general complex torus of dimension at least two has no such class.
+\end{remark}
+
+\section{The K\"ahler Identities and the Laplacians}
+\label{sec:kahler-identities}
+
+Let $(X,\omega)$ be a K\"ahler manifold of complex dimension $n$.
+The identities in this section are local. Write
+\[
+A^k(X,\C)=\bigoplus_{p+q=k}A^{p,q}(X),
+\qquad
+\dd=\partial+\dbar.
+\]
+Let $\partial^*$, $\dbar^*$, and $\dd^*$ be the formal adjoints with respect to
+the $L^2$-pairing on compactly supported forms induced by the Hermitian metric
+and its Riemannian volume form. Taking formal adjoints is additive, so
+\[
+\dd^*=\partial^*+\dbar^*.
+\]
+Set
+\[
+L\alpha=\omega\wedge\alpha,
+\qquad
+\Lambda=L^*.
+\]
+We use ordinary commutators $[A,B]=AB-BA$ when one operator is even and the
+anticommutator $[D_1,D_2]_+=D_1D_2+D_2D_1$ for two odd operators.
+
+\subsection{K\"ahler normal coordinates}
+
+Extend the real metric $g$ complex bilinearly to $g_{\C}$. In holomorphic
+coordinates write
+$g_{j\bar k}=g_{\C}(\partial/\partial z_j,\partial/\partial\bar z_k)$.
+With this convention $\omega=\ii\sum_{j,k}g_{j\bar k}\,\dd z_j\wedge
+\dd\bar z_k$, and the coordinate coframe is unitary at a point where
+$(g_{j\bar k})$ is the identity.
+
+\begin{lemma}[K\"ahler normal coordinates]
+\label{lem:normal-coords}
+A Hermitian metric $g$ on a complex manifold $X$ is K\"ahler if and only if, for
+every $x\in X$, there exist holomorphic coordinates $(z_1,\dots,z_n)$ centered
+at $x$ such that
+\[
+g_{j\bar k}(z)=\delta_{jk}+O(|z|^2).
+\]
+\end{lemma}
+
+\begin{proof}
+If such coordinates exist at every point, the first derivatives of
+$g_{j\bar k}$ vanish at each centre. Hence $\dd\omega$ vanishes at every
+point.
+
+Conversely, fix $x\in X$ and assume $\dd\omega=0$. After a complex-linear
+coordinate change, arrange $g_{j\bar k}(0)=\delta_{jk}$. Write
+\[
+g_{j\bar k}(z)
+=\delta_{jk}
++\sum_l a_{jkl}z_l
++\sum_l\overline{a_{kjl}}\,\bar z_l
++O(|z|^2).
+\]
+The equation $\partial\omega=0$ gives
+\[
+\frac{\partial g_{j\bar k}}{\partial z_l}(0)
+=
+\frac{\partial g_{l\bar k}}{\partial z_j}(0),
+\qquad
+\text{hence}
+\qquad
+a_{jkl}=a_{lkj}.
+\]
+Make a holomorphic quadratic change of coordinates
+\[
+z_j=w_j+\frac12\sum_{k,l}c_{jkl}w_kw_l,
+\qquad c_{jkl}=c_{jlk}.
+\]
+In the transformed coefficient $g'_{l\bar k}$, the coefficient of $w_m$
+is $a_{lkm}+c_{kml}$. The second term comes from differentiating $z$ with
+respect to $w_l$ in the metric transformation formula. Choosing
+\[
+c_{kml}=-a_{lkm}
+\]
+kills these terms. The required symmetry of $c$ follows from the
+K\"ahler symmetry $a_{lkm}=a_{mkl}$. Hermitian symmetry simultaneously removes
+the antiholomorphic linear terms. Thus
+$g_{j\bar k}(w)=\delta_{jk}+O(|w|^2)$ at $x$.
+\end{proof}
+
+In the underlying real coordinates of a holomorphic normal chart, the first
+derivatives of the real metric vanish at its centre. The Levi-Civita
+connection coefficients vanish there and $J$ has constant coordinate
+components. Applying this at each point gives $\nabla J=0$. Since $\nabla g=0$,
+it follows that $\nabla\omega=0$ and the induced connection on forms
+preserves bidegree.
+
+Fix $x\in X$ and take the holomorphic normal coframe $\theta^j=\dd z_j$,
+unitary at $x$. Then
+\[
+\omega_x=\ii\sum_{j=1}^n\theta^j\wedge\bar\theta^j.
+\]
+Let
+\[
+\varepsilon_j\alpha=\theta^j\wedge\alpha,
+\qquad
+\bar\varepsilon_j\alpha=\bar\theta^j\wedge\alpha,
+\]
+and let $\iota_j,\bar\iota_j$ denote contraction by the dual $(1,0)$- and
+$(0,1)$-vectors. The canonical anticommutation relations are
+\[
+[\iota_j,\varepsilon_k]_+=\delta_{jk},
+\qquad
+[\bar\iota_j,\bar\varepsilon_k]_+=\delta_{jk},
+\]
+with all mixed anticommutators equal to zero. At $x$,
+\[
+L=\ii\sum_j\varepsilon_j\bar\varepsilon_j,
+\qquad
+\Lambda=-\ii\sum_j\bar\iota_j\iota_j.
+\]
+
+\begin{lemma}
+\label{lem:lambda-eps}
+At $x$,
+\[
+[\Lambda,\varepsilon_k]=-\ii\bar\iota_k,
+\qquad
+[\Lambda,\bar\varepsilon_k]=\ii\iota_k.
+\]
+\end{lemma}
+
+\begin{proof}
+Terms with index $j\neq k$ commute with $\varepsilon_k$ and
+$\bar\varepsilon_k$. For $j=k$,
+\[
+\bar\iota_k\iota_k\varepsilon_k
+=\bar\iota_k(1-\varepsilon_k\iota_k)
+=\bar\iota_k+\varepsilon_k\bar\iota_k\iota_k,
+\]
+so $[\bar\iota_k\iota_k,\varepsilon_k]=\bar\iota_k$. Similarly,
+\[
+\bar\iota_k\iota_k\bar\varepsilon_k
+=-\bar\iota_k\bar\varepsilon_k\iota_k
+=-\iota_k+\bar\varepsilon_k\bar\iota_k\iota_k,
+\]
+so $[\bar\iota_k\iota_k,\bar\varepsilon_k]=-\iota_k$. Multiplication by
+$-\ii$ proves the result.
+\end{proof}
+
+\begin{lemma}
+\label{lem:L-Lambda}
+The operator $[L,\Lambda]$ acts on $A^k(X,\C)$ as multiplication by $k-n$.
+\end{lemma}
+
+\begin{proof}
+Put $N_j=\varepsilon_j\iota_j$ and
+$\bar N_j=\bar\varepsilon_j\bar\iota_j$. On a monomial
+$\theta^I\wedge\bar\theta^J$, these are the number operators for the occurrence
+of $j$ in $I$ and $J$. Since
+$\iota_j\varepsilon_j=1-N_j$ and
+$\bar\iota_j\bar\varepsilon_j=1-\bar N_j$, a direct calculation gives
+\[
+[L,\Lambda]
+=\sum_j\left(N_j+\bar N_j-1\right).
+\]
+On a $(p,q)$-form, the right-hand side is $p+q-n=k-n$.
+\end{proof}
+
+\begin{lemma}[Local formulas for the Dolbeault operators]
+\label{lem:frame-operators}
+In a holomorphic normal frame, write
+$\nabla_j=\nabla_{\partial/\partial z_j}$ and
+$\nabla_{\bar j}=\nabla_{\partial/\partial\bar z_j}$.
+At its centre,
+\[
+\partial=\sum_j\varepsilon_j\nabla_j,
+\qquad
+\dbar=\sum_j\bar\varepsilon_j\nabla_{\bar j},
+\]
+and
+\[
+\partial^*=-\sum_j\iota_j\nabla_{\bar j},
+\qquad
+\dbar^*=-\sum_j\bar\iota_j\nabla_j.
+\]
+\end{lemma}
+
+\begin{proof}
+The K\"ahler Levi-Civita connection is torsion-free and preserves type.
+Exterior differentiation is therefore the alternation of $\nabla$, and its
+$(1,0)$- and $(0,1)$-parts give the first two formulas, which hold throughout
+the chart.
+
+For the adjoints, write $\langle\cdot,\cdot\rangle$ for the pointwise
+Hermitian product on forms, linear in the first entry. Since $\nabla$ is real
+and metric,
+\begin{equation}
+\label{eq:metric-leibniz}
+v\langle\alpha,\gamma\rangle
+=\langle\nabla_v\alpha,\gamma\rangle
++\langle\alpha,\nabla_{\bar v}\gamma\rangle
+\end{equation}
+for every complex vector field $v$. The form $g_{\C}$ pairs $T^{1,0}$
+perfectly with $T^{0,1}$, so each covector $\bar\theta$ of type $(0,1)$ has a
+dual vector $\bar\theta^{\sharp}\in T^{1,0}$ with
+$g_{\C}(\bar\theta^{\sharp},\cdot)=\bar\theta$. Let $\nabla^{0,1}\beta$ be the
+component of $\nabla\beta$ in $(T^{0,1})^{\vee}\otimes\bigwedge^{\bullet}$,
+and define a first-order operator of bidegree $(-1,0)$ by
+\[
+D\beta=-c\bigl(\nabla^{0,1}\beta\bigr),
+\qquad
+c(\bar\theta\otimes\gamma)=\iota_{\bar\theta^{\sharp}}\gamma.
+\]
+The definition is global and involves no coordinates. At the centre of a
+normal chart $(\dd\bar z_j)^{\sharp}=\partial/\partial z_j$, so
+$D\beta=-\sum_j\iota_j\nabla_{\bar j}\beta$ there.
+
+Fix forms $\alpha$ and $\beta$, and let $\xi$ be the vector field of type
+$(1,0)$ determined by
+$g_{\C}(\xi,\bar w)=\langle\alpha,\iota_w\beta\rangle$ for $w\in T^{1,0}$.
+We claim that
+\begin{equation}
+\label{eq:adjoint-divergence}
+\langle\partial\alpha,\beta\rangle-\langle\alpha,D\beta\rangle
+=\divergence\xi
+\end{equation}
+at every point. Both sides are globally defined functions, so it suffices to
+check the identity at the centre $x$ of a normal chart. The coframe is
+unitary at $x$, so $\varepsilon_j$ has pointwise adjoint $\iota_j$ there.
+The connection coefficients vanish at $x$, so $\nabla_{\bar j}$ commutes
+with $\iota_j$ at $x$. Using \eqref{eq:metric-leibniz} with
+$v=\partial/\partial z_j$, we get at $x$
+\[
+\langle\partial\alpha,\beta\rangle
+=\sum_j\langle\nabla_j\alpha,\iota_j\beta\rangle
+=\sum_j\frac{\partial}{\partial z_j}\langle\alpha,\iota_j\beta\rangle
+-\sum_j\langle\alpha,\iota_j\nabla_{\bar j}\beta\rangle.
+\]
+Since $D\beta=-\sum_j\iota_j\nabla_{\bar j}\beta$ at $x$, the last term is
+$+\langle\alpha,D\beta\rangle$. The components of $\xi$ are
+$\xi^k=\sum_l g^{\bar lk}\langle\alpha,\iota_l\beta\rangle$, where
+$(g^{\bar lk})$ is the inverse matrix of $(g_{k\bar l})$. The first
+derivatives of the metric vanish at $x$, so
+$\divergence\xi=\sum_j\partial\xi^j/\partial z_j
+=\sum_j\partial\langle\alpha,\iota_j\beta\rangle/\partial z_j$ at $x$.
+This proves \eqref{eq:adjoint-divergence}.
+
+If $\alpha$ or $\beta$ has compact support, so does $\xi$, and the divergence
+theorem applied to the real and imaginary parts of $\xi$ shows that
+$\divergence\xi$ has integral zero. Integrating
+\eqref{eq:adjoint-divergence} gives $\partial^*=D$, which is the stated
+formula at the centre. The formula for $\dbar^*$ follows by complex
+conjugation.
+\end{proof}
+
+\begin{theorem}[K\"ahler identities]
+\label{thm:kahler-identities}
+On a K\"ahler manifold,
+\begin{align}
+[\Lambda,\partial]&=\ii\dbar^*,
+&
+[\Lambda,\dbar]&=-\ii\partial^*,
+\label{eq:kahler-first}\\
+[L,\partial^*]&=\ii\dbar,
+&
+[L,\dbar^*]&=-\ii\partial,
+\label{eq:kahler-second}
+\end{align}
+and
+\[
+[L,\partial]=[L,\dbar]=0,
+\qquad
+[\Lambda,\partial^*]=[\Lambda,\dbar^*]=0.
+\]
+\end{theorem}
+
+\begin{proof}
+At a fixed point, $\nabla\omega=0$ implies that $\Lambda$ commutes with the
+covariant derivatives. By \cref{lem:lambda-eps,lem:frame-operators},
+\[
+[\Lambda,\partial]
+=\sum_j[\Lambda,\varepsilon_j]\nabla_j
+=-\ii\sum_j\bar\iota_j\nabla_j
+=\ii\dbar^*,
+\]
+and similarly
+\[
+[\Lambda,\dbar]
+=\ii\sum_j\iota_j\nabla_{\bar j}
+=-\ii\partial^*.
+\]
+Taking formal adjoints gives \eqref{eq:kahler-second}. Finally,
+$\partial\omega=\dbar\omega=0$, so wedging by $\omega$ commutes with
+$\partial$ and $\dbar$. Taking adjoints yields the remaining identities.
+\end{proof}
+
+On a general Hermitian manifold the pointwise linear-algebra identity
+\cref{lem:L-Lambda} remains true, but the differential K\"ahler identities
+acquire torsion terms and the equality of Laplacians below generally fails.
+
+\subsection{Equality of the Laplacians}
+
+Define
+\[
+\Delta_\partial=\partial\partial^*+\partial^*\partial,
+\quad
+\Delta_{\dbar}=\dbar\dbar^*+\dbar^*\dbar,
+\quad
+\Delta_\dd=\dd\dd^*+\dd^*\dd.
+\]
+
+\begin{lemma}
+\label{lem:mixed-terms}
+The mixed anticommutators vanish:
+\[
+[\partial,\dbar^*]_+=0,
+\qquad
+[\dbar,\partial^*]_+=0.
+\]
+\end{lemma}
+
+\begin{proof}
+Since $\dbar^*=-\ii[\Lambda,\partial]$,
+\[
+\partial\dbar^*+\dbar^*\partial
+=-\ii\bigl(
+\partial\Lambda\partial-\partial^2\Lambda
++\Lambda\partial^2-\partial\Lambda\partial
+\bigr)=0.
+\]
+The second identity follows similarly from
+$\partial^*=\ii[\Lambda,\dbar]$ and $\dbar^2=0$.
+\end{proof}
+
+\begin{theorem}
+\label{thm:laplacian-equality}
+On a K\"ahler manifold,
+\[
+\Delta_\partial=\Delta_{\dbar},
+\qquad
+\Delta_\dd=2\Delta_{\dbar}=2\Delta_\partial.
+\]
+\end{theorem}
+
+\begin{proof}
+Using $\partial^*=\ii[\Lambda,\dbar]$ and
+$\partial\dbar+\dbar\partial=0$,
+\[
+\begin{aligned}
+\Delta_\partial
+&=\ii\bigl(\partial[\Lambda,\dbar]+[\Lambda,\dbar]\partial\bigr)\\
+&=\ii\bigl((\partial\Lambda-\Lambda\partial)\dbar
++\dbar(\partial\Lambda-\Lambda\partial)\bigr).
+\end{aligned}
+\]
+By $[\Lambda,\partial]=\ii\dbar^*$,
+$\partial\Lambda-\Lambda\partial=-\ii\dbar^*$, and therefore
+\[
+\Delta_\partial
+=\dbar^*\dbar+\dbar\dbar^*
+=\Delta_{\dbar}.
+\]
+Expanding $\dd=\partial+\dbar$ gives
+\[
+\Delta_\dd
+=\Delta_\partial+\Delta_{\dbar}
++[\partial,\dbar^*]_++[\dbar,\partial^*]_+.
+\]
+The mixed terms vanish by \cref{lem:mixed-terms}, proving the result.
+\end{proof}
+
+\begin{corollary}
+\label{cor:harmonic-agree}
+On smooth complex forms, $\ker\Delta_\dd=\ker\Delta_\partial
+=\ker\Delta_{\dbar}$. Moreover, $\Delta_\dd$ preserves bidegree.
+\end{corollary}
+
+\section{Hodge Decomposition}
+\label{sec:hodge}
+
+From now on, $X$ is compact K\"ahler of complex dimension $n$.
+We use the elliptic Hodge theorem for the de Rham and Dolbeault complexes.
+Each class in either complex has a unique harmonic representative for the
+corresponding Laplacian, and the harmonic spaces are finite-dimensional.
+
+\begin{theorem}[Hodge decomposition]
+\label{thm:hodge}
+For every $k$,
+\[
+H^k(X,\C)=\bigoplus_{p+q=k}H^{p,q}(X),
+\qquad
+H^{p,q}(X)\cong H^q(X,\Omega_X^p).
+\]
+The subspace $H^{p,q}(X)$ consists intrinsically of those cohomology classes
+represented by a closed form of type $(p,q)$. Consequently the decomposition
+is independent of the chosen K\"ahler metric and is functorial for
+holomorphic maps.
+Complex conjugation gives an antilinear isomorphism
+\[
+H^{p,q}(X)\xrightarrow{\sim}H^{q,p}(X),
+\]
+so $h^{p,q}=h^{q,p}$.
+\end{theorem}
+
+\begin{proof}
+By \cref{thm:laplacian-equality}, the operator $\Delta_\dd$ preserves
+bidegree and its kernel on $A^{p,q}(X)$ is the kernel of $\Delta_{\dbar}$
+on that space. The Hodge theorem identifies the degree-$k$ de Rham
+cohomology with the direct sum of these kernels for $p+q=k$.
+The Hodge theorem for $\dbar$ and the Dolbeault isomorphism identify
+the $(p,q)$ kernel with $H^q(X,\Omega_X^p)$.
+
+For a closed form of pure type, its $L^2$ projection onto harmonic forms
+represents the same de Rham class. The projection preserves type because
+the harmonic space splits orthogonally by bidegree. Conversely a harmonic
+form of pure type is a closed representative of that type. This gives
+the intrinsic description. Pullback by a holomorphic map preserves
+closed forms and their type, and complex conjugation commutes with the
+real Laplacian $\Delta_\dd$ while exchanging $(p,q)$ and $(q,p)$.
+\end{proof}
+
+Wedge products of closed forms give the corresponding bidegree rule for
+cup products,
+$H^{p,q}\smile H^{r,s}\subseteq H^{p+r,q+s}$.
+See \cite[\S6.1]{voisin2002hodge} and
+\cite[\S3.2]{huybrechts2005complex} for the K\"ahler Hodge theorem.
+
+The decomposition defines a pure integral Hodge structure of weight $k$ on the
+free lattice
+\[
+H^k(X,\Z)_{\mathrm{free}}
+=H^k(X,\Z)/H^k(X,\Z)_{\mathrm{tors}},
+\]
+whose rationalization is the pure rational Hodge structure on $H^k(X,\Q)$.
+Its Hodge filtration is
+\[
+F^pH^k(X,\C)=\bigoplus_{r\geq p}H^{r,k-r}(X),
+\qquad
+H^k(X,\C)=F^p\oplus\overline{F^{k-p+1}}.
+\]
+This construction applies to every compact K\"ahler manifold. The role of
+the K\"ahler class in polarizing the Hodge structure is discussed in
+\cref{rem:polarization}.
+
+\subsection{Algebraic computation of Hodge numbers}
+\label{subsec:algebraicity}
+
+\begin{corollary}
+\label{cor:algebraic-hodge}
+Let $X$ be a smooth projective $\C$-scheme of pure dimension. Then
+\[
+H^q\bigl(X,\Omega^p_{X/\C}\bigr)
+\cong
+H^q\bigl(\Xan,\Omega^p_{\Xan}\bigr)
+\cong
+H^{p,q}(\Xan).
+\]
+Consequently,
+\[
+h^{p,q}(\Xan)
+=\dim_{\C}H^q\bigl(X,\Omega^p_{X/\C}\bigr).
+\]
+\end{corollary}
+
+\begin{proof}
+In a local affine embedding, the conormal presentation of
+$\Omega^1_{X/\C}$ analytifies to the presentation of holomorphic
+one-forms by the same differentials of local equations. Exterior powers
+give $(\Omega^p_{X/\C})^{\mathrm{an}}\cong\Omega^p_{\Xan}$.
+The sheaf $\Omega^p_{X/\C}$ is coherent, so GAGA gives the first
+isomorphism. \Cref{thm:hodge} gives the second.
+\end{proof}
+
+In the route adopted here, this comparison permits algebraic calculations with
+$\Omega^p_{X/\C}$ to be interpreted as statements about the Hodge decomposition
+of the analytic manifold $\Xan$.
+
+\begin{corollary}
+\label{cor:odd-betti}
+Every odd Betti number of a compact K\"ahler manifold is even.
+\end{corollary}
+
+\begin{proof}
+If $p+q$ is odd, then $p\neq q$. The summands in
+$\sum_{p+q=2r+1}h^{p,q}$ therefore occur in distinct conjugate pairs of equal
+dimension.
+\end{proof}
+
+\begin{example}[Projective space]
+\label{ex:pn}
+For $\PP^n(\C)$,
+\[
+h^{p,q}=0\quad(p\neq q),
+\qquad
+h^{p,p}=1\quad(0\leq p\leq n),
+\]
+and
+\[
+H^*(\PP^n(\C),\Z)\cong\Z[h]/(h^{n+1}),
+\qquad \deg h=2.
+\]
+The ring structure is classical. The hyperplane class $h$ has type $(1,1)$,
+so $h^p$ spans $H^{p,p}$, which gives the Hodge numbers.
+\end{example}
+
+\begin{example}[The Hopf surface]
+\label{ex:hopf}
+Let
+\[
+M=(\C^2\setminus\{0\})/\langle z\mapsto2z\rangle.
+\]
+The map with coordinates $\log|z|$ modulo $\log 2$ and $z/|z|$
+gives a diffeomorphism $M\cong S^1\times S^3$ \cite[\S V.18]{bhpv2004}.
+In particular, $b_1(M)=1$ excludes a K\"ahler metric by
+\cref{cor:odd-betti}.
+
+Here the notation $h^{p,q}$ means $\dim_{\C}H^q(M,\Omega_M^p)$.
+A holomorphic $p$-form on $M$ for $p=1,2$ pulls back to a form whose
+coefficients extend across zero by Hartogs' theorem. Each coefficient
+satisfies $2^p f(2z)=f(z)$ by invariance under dilation, so its Taylor
+series vanishes. Thus $h^{1,0}=h^{2,0}=0$. The surface Riemann--Roch
+formula gives
+\[
+\chi(M,\OO_M)=\frac{1}{12}\int_M\bigl(c_1(T_M)^2+c_2(T_M)\bigr)=0.
+\]
+Here $H^2(M,\Z)=0$ and the top Chern number is the Euler characteristic
+of $S^1\times S^3$, which is zero
+\cite[\S5.1]{huybrechts2005complex}. Serre duality gives $h^{0,2}=0$.
+Since $h^{0,0}=1$, it follows that $h^{0,1}=1$. Thus $h^{1,0}=0$ and
+$h^{0,1}=1$: Hodge symmetry fails on $M$.
+\end{example}
+
+\section{Hard Lefschetz from the
+\texorpdfstring{$\mathfrak{sl}_2$}{sl2}-Action}
+\label{sec:hard-lefschetz}
+
+Put
+\[
+\mathcal H=[L,\Lambda].
+\]
+By \cref{lem:L-Lambda}, $\mathcal H$ acts on $k$-forms by $k-n$. Hence
+\[
+[\mathcal H,L]=2L,
+\qquad
+[\mathcal H,\Lambda]=-2\Lambda,
+\qquad
+[L,\Lambda]=\mathcal H.
+\]
+Moreover, $L^*=\Lambda$ and $\mathcal H^*=\mathcal H$.
+
+\begin{proposition}
+\label{prop:lefschetz-preserves-harmonic}
+The operators $L$, $\Lambda$, and $\mathcal H$ commute with $\Delta_\dd$. Thus
+they preserve harmonic forms and make $H^*(X,\C)$ a finite-dimensional
+Hermitian $\mathfrak{sl}_2(\C)$-module satisfying $L^*=\Lambda$. On cohomology,
+$L$ is cup product with $[\omega]$.
+\end{proposition}
+
+\begin{proof}
+The K\"ahler identities give $[L,\dbar]=0$ and
+$[\dbar^*,L]=\ii\partial$. Therefore
+\[
+[\Delta_{\dbar},L]
+=\dbar[\dbar^*,L]+[\dbar^*,L]\dbar
+=\ii(\dbar\partial+\partial\dbar)=0.
+\]
+By \cref{thm:laplacian-equality}, $[\Delta_\dd,L]=0$. Taking adjoints gives
+$[\Delta_\dd,\Lambda]=0$, and then $[\Delta_\dd,\mathcal H]=0$. The K\"ahler
+form is parallel, hence harmonic, and wedging by it induces cup product with
+$[\omega]$ in de Rham cohomology.
+\end{proof}
+
+\begin{lemma}[Finite-dimensional Hermitian $\mathfrak{sl}_2$-modules]
+\label{lem:sl2-module}
+Let $V$ be a finite-dimensional Hermitian vector space with operators $e,f,h$
+satisfying
+\[
+[h,e]=2e,
+\qquad
+[h,f]=-2f,
+\qquad
+[e,f]=h,
+\]
+and $e^*=f$, $h^*=h$. Write $V_a=\ker(h-a\id)$ and $P=\ker f$. Then:
+\begin{enumerate}
+  \item $V$ is an orthogonal direct sum of irreducible strings
+  \[
+  \operatorname{span}(w_0,ew_0,\dots,e^mw_0),
+  \quad
+  fw_0=0,
+  \quad
+  hw_0=-mw_0,
+  \]
+  with $m\in\Z_{\geq0}$.
+  \item $P\subseteq\bigoplus_{a\leq0}V_a$.
+  \item $V=\bigoplus_{j\geq0}e^jP$.
+  \item For every $r\in\Z_{\geq0}$, $e^r:V_{-r}\to V_r$ is an isomorphism.
+  \item For $a\in\Z_{\leq0}$,
+  \[
+  P\cap V_a=\ker(e^{-a+1})\cap V_a.
+  \]
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Because $h$ is self-adjoint, it is diagonalizable with real eigenvalues. The
+operators $e$ and $f$ raise and lower weights by two. Choose a nonzero vector
+$w_0$ of minimal weight. Then $fw_0=0$. Write $hw_0=-mw_0$. Induction from
+$fe=ef-h$ gives
+\[
+f e^j w_0=j(m-j+1)e^{j-1}w_0,\qquad j\geq1.
+\]
+If $\ell$ is maximal with $e^\ell w_0\neq0$, applying this formula to
+$e^{\ell+1}w_0=0$ gives $m=\ell\in\Z_{\geq0}$. Thus the span of
+$w_0,ew_0,\dots,e^mw_0$ is invariant and has weights
+$-m,-m+2,\dots,m$. Any nonzero invariant subspace contains a weight vector
+by projecting onto an eigenspace with a polynomial in $h$. Each weight
+space in this string is a line. The recurrence and the action of $e$
+generate the full string from any of these lines, proving irreducibility.
+The orthogonal complement is invariant because $e^*=f$ and $h^*=h$.
+Induction on $\dim V$ proves (i).
+
+On each irreducible string, $\ker f$ is the lowest-weight line $\C w_0$,
+proving (ii) and (iii). The weight spaces of weights $-r$ and $r$ are either
+both zero or are one-dimensional and are carried isomorphically to one another
+by $e^r$, which proves (iv). In a string of lowest weight $-m$, a vector
+of weight $a=-m+2t\leq0$ lies at level $t$. Applying $e^{1-a}$ would
+send it to level $m-t+1$. This exceeds the last level $m$ exactly when
+$t=0$, giving (v).
+\end{proof}
+
+\begin{theorem}[Hard Lefschetz]
+\label{thm:hard-lefschetz}
+Let $X$ be compact K\"ahler of complex dimension $n$. For every integer
+$0\leq r\leq n$,
+\[
+L^r:H^{n-r}(X,\C)\xrightarrow{\sim}H^{n+r}(X,\C).
+\]
+\end{theorem}
+
+\begin{proof}
+Apply \cref{lem:sl2-module} with
+$e=L$, $f=\Lambda$, and $h=\mathcal H$. Since $\mathcal H$ acts on $H^k$ by
+$k-n$, the weight spaces $V_{-r}$ and $V_r$ are respectively
+$H^{n-r}(X,\C)$ and $H^{n+r}(X,\C)$. Now use
+\cref{lem:sl2-module}\,(iv).
+\end{proof}
+
+\begin{definition}[Primitive cohomology]
+\label{def:primitive}
+On cohomology, $\Lambda$ acts on harmonic representatives. Set
+\[
+P^k(X)=\ker\bigl(\Lambda:H^k(X,\C)\to H^{k-2}(X,\C)\bigr).
+\]
+\end{definition}
+
+By \cref{lem:sl2-module}\,(ii), $P^k(X)=0$ for $k>n$.
+
+\begin{proposition}
+\label{prop:primitive-alt}
+For $k\leq n$,
+\[
+P^k(X)
+=\ker\bigl(L^{n-k+1}:H^k(X,\C)\to H^{2n-k+2}(X,\C)\bigr).
+\]
+\end{proposition}
+
+\begin{proof}
+The group $H^k$ is the weight space of weight $a=k-n\leq0$. Apply
+\cref{lem:sl2-module}\,(v), noting that $-a+1=n-k+1$.
+\end{proof}
+
+\begin{theorem}[Lefschetz decomposition]
+\label{thm:lefschetz-decomp}
+For $0\leq k\leq2n$,
+\[
+H^k(X,\C)=\bigoplus_{j=\max(0,k-n)}^{\lfloor k/2\rfloor}
+L^jP^{k-2j}(X).
+\]
+\end{theorem}
+
+\begin{proof}
+Take the degree-$k$ part of the string decomposition in
+\cref{lem:sl2-module}. A string beginning in degree $s=k-2j$ has
+lowest weight $s-n$ and last term $L^{n-s}$ applied to a primitive
+vector. Thus its $j$-th translate occurs for $s\geq0$ and
+$0\leq j\leq n-s$, which gives the stated bounds.
+\end{proof}
+
+\begin{remark}[Rational coefficients]
+\label{rem:rational-lefschetz}
+If $[\omega]$ is rational, cup product by $[\omega]$ defines $L$ over
+$\Q$. The rational Hard Lefschetz map becomes an isomorphism over $\C$
+and is therefore an isomorphism over $\Q$. For $0\leq k\leq n$ put
+\[
+P^k(X,\Q)=\ker\bigl(L^{n-k+1}:H^k(X,\Q)\to H^{2n-k+2}(X,\Q)\bigr).
+\]
+Complexification identifies this with the complex primitive space
+$P^k(X,\C)=P^k(X)$ by \cref{prop:primitive-alt}. The sum of the rational images
+$L^jP^{k-2j}(X,\Q)$ likewise becomes the Lefschetz decomposition over
+$\C$, so the direct sum holds over $\Q$. Cup product by $[\omega]$ has
+type $(1,1)$, and the primitive kernels inherit their Hodge structures
+from cohomology.
+\end{remark}
+
+\begin{corollary}
+\label{cor:betti-monotone}
+For $k<n$, the map
+\[
+L:H^k(X,\C)\longrightarrow H^{k+2}(X,\C)
+\]
+is injective. Hence $b_k\leq b_{k+2}$.
+\end{corollary}
+
+\begin{proof}
+If $L\alpha=0$, then $L^{n-k}\alpha=0$. Hard Lefschetz says that
+$L^{n-k}:H^k\to H^{2n-k}$ is an isomorphism, so $\alpha=0$.
+\end{proof}
+
+The inequality need not be strict: all nonzero even Betti numbers of
+$\PP^n(\C)$ are equal to one.
+
+\section{The Hodge Numbers of a Smooth Quintic Threefold}
+\label{sec:quintic}
+
+Let $X=V(F)\subset\PP^4_{\C}$ be a smooth hypersurface of degree five and
+put $M=\Xan$. Use the normalized Fubini--Study form on $M$, whose class
+is the image of
+\[
+h=c_1\bigl(\OO_{\PP^4}(1)|_X\bigr)\in H^2(M,\Z).
+\]
+In this section the Betti and Hodge numbers are those of $M$.
+Chern classes of algebraic bundles are taken in topological cohomology
+on $M$.
+
+\subsection{Weak Lefschetz and adjunction}
+
+The degree-five Veronese embedding presents $X$ as a hyperplane section
+of the embedded $\PP^4$. The weak Lefschetz theorem gives
+\[
+H^k(\PP^4(\C),\Z)\xrightarrow{\sim}H^k(M,\Z)
+\qquad(k<3)
+\]
+\cite[Ch.~1]{voisin2003hodge2}. In degree zero this gives connectedness.
+In degrees one and two it gives $b_1=0$ and
+$H^2(M,\Z)=\Z h$. The generator $h$ has type $(1,1)$, so
+\[
+h^{1,0}=h^{0,1}=h^{2,0}=h^{0,2}=0,\qquad h^{1,1}=1.
+\]
+
+Adjunction and $K_{\PP^4}\cong\OO_{\PP^4}(-5)$ give
+\[
+K_X
+\cong\bigl(K_{\PP^4}\otimes\OO_{\PP^4}(5)\bigr)|_X
+\cong\OO_X.
+\]
+Holomorphic functions on the connected compact manifold $M$ are constant,
+so GAGA gives $\dim_{\C}H^0(X,\OO_X)=1$. By \cref{cor:algebraic-hodge}
+and Hodge symmetry,
+\[
+h^{3,0}=\dim_{\C}H^0(X,K_X)=1,\qquad h^{0,3}=1.
+\]
+The same comparison gives $H^1(X,\OO_X)=H^2(X,\OO_X)=0$ from the
+$(0,1)$ and $(0,2)$ vanishings. Thus $X$ satisfies the Calabi--Yau
+convention used here, namely trivial canonical bundle and
+$H^i(X,\OO_X)=0$ for $0<i<3$.
+
+Poincar\'e duality gives $b_5=0$ and $b_6=1$. By rational Hard Lefschetz,
+cup product by $h$ identifies $H^2(M,\Q)$ with $H^4(M,\Q)$
+(\cref{rem:rational-lefschetz}). Hence
+\[
+H^4(M,\Q)=\Q h^2.
+\]
+The generator has type $(2,2)$, so $h^{2,2}=1$ and all other
+degree-four Hodge numbers vanish.
+
+\subsection{Chern classes and the Euler characteristic}
+
+The normal bundle of $X$ in $\PP^4$ is $\OO_X(5)$, so
+\[
+0\longrightarrow T_X
+\longrightarrow T_{\PP^4}|_X
+\longrightarrow\OO_X(5)
+\longrightarrow0.
+\]
+The Euler sequence gives
+\[
+c(T_{\PP^4}|_X)=(1+h)^5.
+\]
+Therefore
+\[
+c(T_X)=\frac{(1+h)^5}{1+5h}.
+\]
+Through the term in $h^3$,
+\[
+(1+5h)^{-1}=1-5h+25h^2-125h^3+\cdots,
+\]
+and hence
+\[
+c(T_X)=1+10h^2-40h^3.
+\]
+Thus
+\[
+c_1(T_X)=0,
+\qquad
+c_2(T_X)=10h^2,
+\qquad
+c_3(T_X)=-40h^3.
+\]
+Since $\deg X=5$,
+\[
+\int_M h^3=5.
+\]
+The top Chern class of the complex tangent bundle is the Euler class
+of the underlying real tangent bundle. Its integral is
+$\chi_{\mathrm{top}}(M)$
+\cite[Cor.~11.12 and \S14]{milnorstasheff1974}. Therefore
+\[
+\chi_{\mathrm{top}}(M)
+=\int_M c_3(T_X)
+=-40\int_M h^3
+=-200.
+\]
+On the other hand,
+\[
+\chi_{\mathrm{top}}(M)
+=1-0+1-b_3+1-0+1
+=4-b_3,
+\]
+so
+\[
+b_3=204.
+\]
+Finally,
+\[
+H^3(M,\C)
+=H^{3,0}\oplus H^{2,1}\oplus H^{1,2}\oplus H^{0,3}.
+\]
+Hodge symmetry gives $h^{2,1}=h^{1,2}$, and therefore
+\[
+204=1+h^{2,1}+h^{1,2}+1
+=2+2h^{2,1}.
+\]
+Consequently,
+\[
+\boxed{h^{2,1}=h^{1,2}=101}.
+\]
+
+\begin{theorem}[Hodge diamond of a smooth quintic threefold]
+\label{thm:quintic}
+The nonzero Hodge numbers of a smooth quintic threefold are
+\[
+h^{0,0}=h^{3,3}=1,
+\quad
+h^{1,1}=h^{2,2}=1,
+\quad
+h^{3,0}=h^{0,3}=1,
+\quad
+h^{2,1}=h^{1,2}=101.
+\]
+Thus its Hodge diamond is
+\[
+\begin{array}{ccccccc}
+&&&1&&&\\[2pt]
+&&0&&0&&\\[2pt]
+&0&&1&&0&\\[2pt]
+1&&101&&101&&1\\[2pt]
+&0&&1&&0&\\[2pt]
+&&0&&0&&\\[2pt]
+&&&1&&&
+\end{array}
+\]
+and
+\[
+(b_0,\dots,b_6)=(1,0,1,204,1,0,1),
+\qquad
+\chi_{\mathrm{top}}=-200.
+\]
+\end{theorem}
+
+\begin{remark}[All smooth quintics are diffeomorphic]
+\label{rem:quintic-diffeo}
+The computation above applies to each smooth quintic separately, so
+\cref{thm:quintic} needs no comparison between different quintics. More is
+true: any two smooth quintics are diffeomorphic. The smooth quintic
+equations form the complement of the discriminant in $\PP^{125}$. The
+projective line through two distinct smooth equations meets the
+discriminant in finitely many points, and the complement of these points
+in the line is path-connected. Over the smooth locus of equations, the
+universal hypersurface is a proper submersion, so Ehresmann's theorem
+gives diffeomorphic fibers.
+\end{remark}
+
+\begin{remark}[Deformation-theoretic check]
+\label{rem:moduli}
+Choose a nowhere-vanishing algebraic section of $K_X$. Contraction
+identifies $T_X\cong\Omega_X^2$, so $H^1(X,T_X)\cong H^{2,1}(M)$ by
+\cref{cor:algebraic-hodge}. The same identification and $h^{2,0}=0$
+give $H^0(X,T_X)=0$.
+
+The restriction sequence
+\[
+0\longrightarrow\OO_{\PP^4}(m-5)\longrightarrow\OO_{\PP^4}(m)
+\longrightarrow\OO_X(m)\longrightarrow0
+\]
+gives $h^0(X,\OO_X(5))=\binom{9}{4}-1=125$ and
+$h^0(X,\OO_X(1))=5$. Here we use the vanishing of $H^1$ of line bundles
+on $\PP^4$ \cite[Ch.~III, \S5]{hartshorne1977}. With $m=1$, the vanishing of
+$H^1(\PP^4,\OO_{\PP^4}(1))$ and $H^2(\PP^4,\OO_{\PP^4}(-4))$ also gives
+$H^1(X,\OO_X(1))=0$. The restricted Euler sequence
+\[
+0\longrightarrow\OO_X\longrightarrow\OO_X(1)^{\oplus5}
+\longrightarrow T_{\PP^4}|_X\longrightarrow0
+\]
+and $H^1(X,\OO_X)=0$ give $h^0(X,T_{\PP^4}|_X)=5\cdot5-1=24$.
+Its long exact sequence, with $H^1(X,\OO_X(1))=0$ and $H^2(X,\OO_X)=0$,
+gives $H^1(X,T_{\PP^4}|_X)=0$.
+
+The normal sequence therefore gives $h^1(X,T_X)=125-24=101$.
+First-order abstract deformations of $X$ are classified by $H^1(X,T_X)$
+\cite[Ch.~6]{huybrechts2005complex}. The connecting map of the normal
+sequence takes a first-order embedded deformation to its abstract
+deformation class \cite[Ch.~3]{sernesi2006}. Its surjectivity shows that
+every first-order deformation comes from varying the quintic equation.
+\end{remark}
+
+\section{Topological and Hodge-Theoretic Consequences}
+\label{sec:consequences}
+
+Let $X$ be nonempty, smooth, and projective over $\C$ of pure dimension $n$,
+and put $M=\Xan$. The preceding theorems give the following constraints.
+\begin{enumerate}
+  \item Every odd Betti number of $M$ is even.
+  \item Poincar\'e duality gives $b_k=b_{2n-k}$.
+  \item Hard Lefschetz gives $b_k\leq b_{k+2}$ for $k<n$. Together with
+  Poincar\'e duality, the even-degree and odd-degree Betti subsequences are
+  separately symmetric and unimodal about the middle dimension. For a
+  curve $C_g$ of genus $g\geq2$, K\"unneth gives the Betti numbers
+  $(1,2g,2,2g,1)$ for $\PP^1\times C_g$, which fail unimodality across
+  all degrees.
+  \item For every $0\leq k\leq n$, one has $b_{2k}\geq1$. Indeed,
+  $\int_M\omega^n>0$, so $[\omega]^n\neq0$, and
+  $[\omega]^k[\omega]^{n-k}=[\omega]^n$ forces $[\omega]^k\neq0$.
+  Consequently, no smooth projective variety of complex dimension at least two
+  is a rational homology sphere. The one-dimensional exception is
+  $\PP^1(\C)\cong S^2$.
+  \item Hodge symmetry gives $h^{p,q}=h^{q,p}$.
+  \item Serre duality and $(\Omega_M^p)^\vee\otimes K_M\cong\Omega_M^{n-p}$
+  give $h^{p,q}=h^{n-p,n-q}$.
+  \item Each $H^k(M,\Q)$ carries a pure rational Hodge structure. The integral
+  hyperplane class supplies a rational Lefschetz operator, and the primitive
+  Hodge structures are polarizable over $\Q$.
+\end{enumerate}
+
+\begin{remark}[Polarization]
+\label{rem:polarization}
+Let $k\leq n$ and choose a rational K\"ahler class $[\omega]$. On the
+primitive space $P^k(M,\Q)$ of \cref{rem:rational-lefschetz}, put
+\[
+Q_k(\alpha,\beta)
+=(-1)^{k(k-1)/2}\int_M\alpha\smile\beta\smile[\omega]^{n-k}.
+\]
+The Hodge--Riemann bilinear relations
+\cite[\S\S6.3.2 and 7.1.2]{voisin2002hodge} give, on extending
+$Q_k$ complex bilinearly,
+\[
+Q_k(F^pP^k(M,\C),F^{k-p+1}P^k(M,\C))=0,
+\qquad
+\ii^{p-q}Q_k(\alpha,\overline\alpha)>0
+\quad(0\ne\alpha\in P^{p,q}).
+\]
+Thus $Q_k$ polarizes the primitive rational Hodge structure. A real
+K\"ahler class gives the corresponding real polarization on a compact
+K\"ahler manifold.
+
+For an integral $[\omega]$, the primitive lattice is the intersection of
+$P^k(M,\Q)$ with $H^k(M,\Z)/\mathrm{tors}$ inside $H^k(M,\Q)$. The form
+$Q_k$ takes integer values on this lattice and is nondegenerate over
+$\Q$. For instance, on the quintic with $[\omega]=h$ one has
+$Q_0(1,1)=5$. The homological form of the weak Lefschetz theorem and
+Poincar\'e duality give $H^4(M,\Z)\cong H_2(M,\Z)\cong\Z$
+\cite[Ch.~1]{voisin2003hodge2}. Let $\ell$ be the generator with
+$\int_M h\smile\ell=1$. Then $h^2=5\ell$, because $\int_M h^3=5$, and the
+integral Lefschetz map
+\[
+h\smile{-}:H^2(M,\Z)\longrightarrow H^4(M,\Z)
+\]
+has image of index five. The companion notes show that $\ell$ is the class
+of a line on $X$ \cite[\S10.2]{hodgenotes}.
+
+Over $\Q$, the $j$-th summand in the degree-$k$ Lefschetz decomposition
+is isomorphic as a Hodge structure to $P^{k-2j}(M,\Q)(-j)$.
+Here $\Q(-j)$ has type $(j,j)$, the shift in bidegree induced by $L^j$.
+\end{remark}
+
+\section{Inputs and Further Directions}
+\label{sec:limits}
+
+The analytification and GAGA theorems are inputs. The analytic proofs use the
+elliptic Hodge theorem for the de Rham and Dolbeault complexes and the Dolbeault
+isomorphism. The normal coordinates and the local formulas for formal adjoints
+are derived in \cref{sec:kahler-identities}.
+
+The applications use weak Lefschetz, adjunction, the Euler and normal
+sequences, the Whitney formula, the cohomology of line bundles on projective
+space, Poincar\'e and Serre duality, and Chern--Gauss--Bonnet. The Hopf surface
+calculation also uses Hartogs' theorem and surface Riemann--Roch. The
+quintic remarks use Ehresmann's theorem and the description of first-order
+deformations. The
+polarization statement uses the Hodge--Riemann bilinear relations. Kodaira's
+embedding theorem is quoted only in \cref{rem:kodaira}.
+
+\begin{remark}[Algebraic de Rham cohomology]
+For a smooth complex algebraic variety, Grothendieck's comparison
+theorem \cite{grothendieck1966derham} identifies
+\[
+\mathbb H^k(X,\Omega^\bullet_{X/\C})\cong H^k(\Xan,\C).
+\]
+For a smooth proper variety the Hodge-to-de Rham spectral sequence
+degenerates at $E_1$. Deligne--Illusie prove degeneration in
+characteristic zero by reduction to positive characteristic
+\cite[Cor.~2.7]{deligneillusie1987}.
+\end{remark}
+
+\begin{remark}[Mixed Hodge structures]
+Smoothness and properness give purity for the ordinary cohomology of a
+complex algebraic variety. For smooth nonproper and for singular varieties,
+ordinary cohomology generally carries a mixed Hodge structure
+\cite{deligne1971hodge,deligne1974hodge}. For singular projective varieties,
+intersection cohomology recovers analogues of purity and Hard Lefschetz.
+\end{remark}
+
+\begin{remark}[Cycles and variation]
+For smooth projective $X$ with $M=\Xan$, the Lefschetz $(1,1)$ theorem
+identifies the image of $c_1:\Pic(X)\to H^2(M,\Z)$ with
+\[
+\{a\in H^2(M,\Z): a_{\C}\in H^{1,1}(M)\}.
+\]
+The preimage formulation includes integral torsion classes. The companion
+notes give the proof by the analytic exponential sequence and GAGA, and
+use rational Hard Lefschetz to treat classes of curves. For the quintic
+they represent the generator of $H^4(M,\Z)$ by a line
+\cite[\S\S10.1--10.2]{hodgenotes}.
+
+In a smooth projective family the Hodge filtration on the flat cohomology
+bundle varies holomorphically and satisfies Griffiths transversality.
+Hypersurfaces, including smooth quintics, provide examples of the
+resulting period maps \cite[Ch.~6]{voisin2003hodge2}.
+\end{remark}
+
+%\clearpage
+\bibliographystyle{amsalpha}
+\bibliography{references}
+
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: LaTeX
+%%% TeX-master: t
+%%% End:
