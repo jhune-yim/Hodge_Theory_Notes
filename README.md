@@ -4,13 +4,14 @@ Two expository papers on the Hodge theory of smooth complex projective varieties
 
 ## Contents
 
-| File                                 | Title                                                                   |
-|--------------------------------------|-------------------------------------------------------------------------|
-| `gaga_kahler_lefschetz.tex`          | Notes on Analytification, GAGA, Kähler Identities, and Lefschetz Theory |
-| [`gaga_kahler_lefschetz.pdf`](gaga_kahler_lefschetz.pdf)    | --- |
-| `hodge_classes_algebraic_cycles.tex` | Hodge Classes and Algebraic Cycles                                      |
-| [`hodge_classes_algebraic_cycles.pdf`](hodge_classes_algebraic_cycles.pdf) | ---  |
-| `references.bib`                     | Bibliography used by both papers                                        |
+| File                                                                       | Title                                                                   |
+|----------------------------------------------------------------------------|-------------------------------------------------------------------------|
+| `gaga_kahler_lefschetz.tex`                                                | Notes on Analytification, GAGA, Kähler Identities, and Lefschetz Theory |
+| [`gaga_kahler_lefschetz.pdf`](gaga_kahler_lefschetz.pdf)                   | ---                                                                     |
+| `hodge_classes_algebraic_cycles.tex`                                       | Hodge Classes and Algebraic Cycles                                      |
+| [`hodge_classes_algebraic_cycles.pdf`](hodge_classes_algebraic_cycles.pdf) | ---                                                                     |
+| `references.bib`                                                           | Bibliography used by both papers                                        |
+|                                                                            |                                                                         |
 
 ### Notes on Analytification, GAGA, Kähler Identities, and Lefschetz Theory
 
